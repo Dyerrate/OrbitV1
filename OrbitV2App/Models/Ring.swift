@@ -11,4 +11,3 @@ import Foundation
 struct Ring {
     var planet: Planet, notificationTimeInterval: TimeInterval
 }
-

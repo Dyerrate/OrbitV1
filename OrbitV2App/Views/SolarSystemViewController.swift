@@ -15,7 +15,9 @@ class SolarSystemViewController: UIViewController {
     }
     
     private func setupUI() {
+        view.backgroundColor = UIColor.black
         let planetView = PlanetView()
+        
         view.addSubview(planetView)
         
         planetView.translatesAutoresizingMaskIntoConstraints = false

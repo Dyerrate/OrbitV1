@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class LoginViewController: UIViewController {
     private let emailTextField = UITextField()
@@ -53,6 +54,7 @@ class LoginViewController: UIViewController {
           // Configure forgotPasswordButton
         forgotPasswordButton.setTitle("Forgot Password?", for: .normal)
         forgotPasswordButton.setTitleColor(UIColor.orbitForgotPasswordButtonTitle, for: .normal)
+        forgotPasswordButton.addTarget(self, action: #selector(forgotPassword), for: .touchUpInside)
         registerButton.setTitle("Register", for: .normal)
         registerButton.setTitleColor(UIColor.orbitForgotPasswordButtonTitle, for: .normal)
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
@@ -131,6 +133,7 @@ class LoginViewController: UIViewController {
             forgotPasswordButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             forgotPasswordButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 10),
             forgotPasswordButton.heightAnchor.constraint(equalToConstant: 44)
+            
         ])
     }
     
@@ -149,9 +152,24 @@ class LoginViewController: UIViewController {
 
     @objc private func loginUser() {
         // Authenticate user and call checkNotificationAccess() on success
-        let loadingView = SolarSystemViewController()
-        
-        
+        guard let email = emailTextField.text, let password = passwordTextField.text else {
+            // Handle empty email or password fields
+            return
+        }
+        UserManager.shared.authenticateUser(email: email, password: password) { result in
+            switch result {
+            case .success(let user):
+                // Handle successful login, e.g., present the loading screen
+                DispatchQueue.main.async {
+                    self.showLoadingScreen(for: user)
+                }
+            case .failure(let error):
+                // Handle login error
+                DispatchQueue.main.async {
+                    self.showLoginError(error: error)
+                }
+            }
+        }
     }
     @objc func registerButtonTapped() {
         let registerVC = RegisterViewController()
@@ -160,6 +178,11 @@ class LoginViewController: UIViewController {
         present(navigationController, animated: true, completion: nil)
     }
 
+    private func showLoadingScreen(for user: User) {
+        let loadingViewController = LoadingViewController()
+        navigationController?.pushViewController(loadingViewController, animated: true)
+    }
+    
     private func checkNotificationAccess() {
         NotificationManager().checkAccess { status in
             DispatchQueue.main.async {
@@ -181,9 +204,19 @@ class LoginViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alertController, animated: true, completion: nil)
     }
+    private func showLoginError(error: Error) {
+        let alertController = UIAlertController(title: "Login Error", message: error.localizedDescription, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
 
     @objc private func forgotPassword() {
         // Handle forgot password functionality
+        if let url = URL(string: "https://www.sirdyer.com") {
+            let safariVC = SFSafariViewController(url: url)
+            self.present(safariVC, animated: true, completion: nil)
+        }
     }
 }
 
