@@ -6,26 +6,28 @@
 //
 
 import UIKit
+import SpriteKit
 
 class SolarSystemViewController: UIViewController {
-    
+    private var skView: SKView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
+        view.backgroundColor = .black
+        
+        setupSKView()
+        presentSolarSystemScene()
     }
-    
-    private func setupUI() {
-        view.backgroundColor = UIColor.black
-        let planetView = PlanetView()
-        
-        view.addSubview(planetView)
-        
-        planetView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            planetView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            planetView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            planetView.widthAnchor.constraint(equalToConstant: 50),
-            planetView.heightAnchor.constraint(equalToConstant: 50)
-        ])
+
+    private func setupSKView() {
+        skView = SKView(frame: view.bounds)
+        skView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        view.addSubview(skView)
+    }
+
+    private func presentSolarSystemScene() {
+        let scene = SolarSystemScene(size: skView.bounds.size)
+        scene.scaleMode = .aspectFill
+        skView.presentScene(scene)
     }
 }

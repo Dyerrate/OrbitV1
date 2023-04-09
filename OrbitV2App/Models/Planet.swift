@@ -6,7 +6,20 @@
 //
 
 import Foundation
+import UIKit
 
-struct Planet {
-    var notifications: [Notification]
+class Planet {
+    let name: String
+    let image: UIImage
+    var notifications: [UNNotificationRequest]
+
+    init(name: String, image: UIImage) {
+        self.name = name
+        self.image = image
+        self.notifications = []
+    }
+    
+    func addNotification(_ notification: UNNotificationRequest) {
+        self.notifications.append(notification)
+    }
 }

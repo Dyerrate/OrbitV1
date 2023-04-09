@@ -25,9 +25,11 @@
 		580859AA29D879E900E6F2AD /* SolarSystemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A929D879E900E6F2AD /* SolarSystemViewController.swift */; };
 		580859AC29D879FC00E6F2AD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859AB29D879FC00E6F2AD /* LoginViewController.swift */; };
 		580859AE29D87A1200E6F2AD /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859AD29D87A1200E6F2AD /* RegisterViewController.swift */; };
+		581DCA1129E2339C006665C4 /* SolarSystemScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DCA1029E2339C006665C4 /* SolarSystemScene.swift */; };
 		586D878029DE1B780069E68B /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D877F29DE1B780069E68B /* LoadingViewController.swift */; };
 		586D878229DE20380069E68B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878129DE20380069E68B /* User.swift */; };
 		586D878429DE26AF0069E68B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878329DE26AF0069E68B /* UserManager.swift */; };
+		5872649129E31D4E00B795D7 /* PlanetNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872649029E31D4E00B795D7 /* PlanetNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,9 +53,11 @@
 		580859A929D879E900E6F2AD /* SolarSystemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarSystemViewController.swift; sourceTree = "<group>"; };
 		580859AB29D879FC00E6F2AD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		580859AD29D87A1200E6F2AD /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		581DCA1029E2339C006665C4 /* SolarSystemScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarSystemScene.swift; sourceTree = "<group>"; };
 		586D877F29DE1B780069E68B /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		586D878129DE20380069E68B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		586D878329DE26AF0069E68B /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		5872649029E31D4E00B795D7 /* PlanetNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +90,7 @@
 		5808597F29D870B600E6F2AD /* OrbitV2App */ = {
 			isa = PBXGroup;
 			children = (
+				581DCA0D29E23362006665C4 /* Scenes */,
 				580859A629D879B700E6F2AD /* Controllers */,
 				5808599F29D8718F00E6F2AD /* Views */,
 				5808599429D8711B00E6F2AD /* Models */,
@@ -134,6 +139,15 @@
 				586D878329DE26AF0069E68B /* UserManager.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		581DCA0D29E23362006665C4 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				581DCA1029E2339C006665C4 /* SolarSystemScene.swift */,
+				5872649029E31D4E00B795D7 /* PlanetNode.swift */,
+			);
+			path = Scenes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,6 +222,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				586D878429DE26AF0069E68B /* UserManager.swift in Sources */,
+				5872649129E31D4E00B795D7 /* PlanetNode.swift in Sources */,
 				580859AC29D879FC00E6F2AD /* LoginViewController.swift in Sources */,
 				5808598529D870B600E6F2AD /* ViewController.swift in Sources */,
 				5808598129D870B600E6F2AD /* AppDelegate.swift in Sources */,
@@ -216,6 +231,7 @@
 				580859A529D8780400E6F2AD /* LoadingView.swift in Sources */,
 				580859A129D877CA00E6F2AD /* RingView.swift in Sources */,
 				586D878229DE20380069E68B /* User.swift in Sources */,
+				581DCA1129E2339C006665C4 /* SolarSystemScene.swift in Sources */,
 				580859AE29D87A1200E6F2AD /* RegisterViewController.swift in Sources */,
 				580859A329D877E500E6F2AD /* PlanetView.swift in Sources */,
 				580859A829D879C900E6F2AD /* NotificationManager.swift in Sources */,
