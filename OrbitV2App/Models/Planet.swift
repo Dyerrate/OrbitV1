@@ -10,12 +10,12 @@ import UIKit
 
 class Planet {
     let name: String
-    let image: UIImage
+    let image: UIImage?
     var notifications: [UNNotificationRequest]
 
-    init(name: String, image: UIImage) {
+    init(name: String, imageName: String) {
         self.name = name
-        self.image = image
+        self.image = UIImage(named: imageName)
         self.notifications = []
     }
     

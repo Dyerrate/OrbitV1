@@ -8,15 +8,14 @@
 import SpriteKit
 
 class PlanetNode: SKSpriteNode {
-    private var planet: Planet
-    private var skView: SKView?
-    
-    init(planet: Planet, view: SKView? = nil) {
+    private let planet: Planet
+    private weak var view: UIView?
+
+    init(planet: Planet, imageNamed: String, view: UIView) {
         self.planet = planet
-        self.skView = view
-        let texture = SKTexture(image: planet.image)
+        self.view = view
+        let texture = SKTexture(imageNamed: imageNamed)
         super.init(texture: texture, color: .clear, size: texture.size())
-        
         isUserInteractionEnabled = true
     }
     
@@ -25,12 +24,13 @@ class PlanetNode: SKSpriteNode {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Planet tapped: \(planet.name)")
-
-        if let view = skView {
-            let planetView = PlanetView(planet: planet)
-            planetView.frame = view.bounds
-            planetView.show(in: view)
-        }
+        handleTap()
+    }
+    
+    func handleTap() {
+        guard let view = view else { return }
+        let planetView = PlanetView(planet: planet)
+        planetView.frame = view.bounds
+        view.addSubview(planetView)
     }
 }

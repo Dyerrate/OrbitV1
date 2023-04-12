@@ -30,6 +30,7 @@
 		586D878229DE20380069E68B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878129DE20380069E68B /* User.swift */; };
 		586D878429DE26AF0069E68B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878329DE26AF0069E68B /* UserManager.swift */; };
 		5872649129E31D4E00B795D7 /* PlanetNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872649029E31D4E00B795D7 /* PlanetNode.swift */; };
+		58EDE6D529E62BCE005CE84A /* OrbitNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EDE6D429E62BCE005CE84A /* OrbitNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +59,7 @@
 		586D878129DE20380069E68B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		586D878329DE26AF0069E68B /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		5872649029E31D4E00B795D7 /* PlanetNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetNode.swift; sourceTree = "<group>"; };
+		58EDE6D429E62BCE005CE84A /* OrbitNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbitNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,7 @@
 			children = (
 				581DCA1029E2339C006665C4 /* SolarSystemScene.swift */,
 				5872649029E31D4E00B795D7 /* PlanetNode.swift */,
+				58EDE6D429E62BCE005CE84A /* OrbitNode.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -235,6 +238,7 @@
 				580859AE29D87A1200E6F2AD /* RegisterViewController.swift in Sources */,
 				580859A329D877E500E6F2AD /* PlanetView.swift in Sources */,
 				580859A829D879C900E6F2AD /* NotificationManager.swift in Sources */,
+				58EDE6D529E62BCE005CE84A /* OrbitNode.swift in Sources */,
 				5808599C29D8717300E6F2AD /* Notification.swift in Sources */,
 				5808599A29D8715A00E6F2AD /* Planet.swift in Sources */,
 				5808599629D8712C00E6F2AD /* SolarSystem.swift in Sources */,
