@@ -13,9 +13,11 @@ class SolarSystemScene: SKScene {
     private var planetNode3: PlanetNode!
     private var sun: SKSpriteNode!
     private var ring: SKSpriteNode!
-    private var cameraNode: SKCameraNode!
+    var cameraNode: SKCameraNode!
     private var lastTouchLocation: CGPoint?
     private var initialCameraScale: CGFloat = 1.0
+    var selectedPlanetNode: PlanetNode?
+
     
     override func didMove(to view: SKView) {
         backgroundColor = .black
@@ -78,15 +80,16 @@ class SolarSystemScene: SKScene {
         
         let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         view.addGestureRecognizer(pinchGestureRecognizer)
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let touchedNode = atPoint(location)
-        
+
         if let planetNode = touchedNode as? PlanetNode {
-            planetNode.handleTap()
+            planetNode.handleTap(with: cameraNode, in: self)
         }
     }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -102,11 +105,12 @@ class SolarSystemScene: SKScene {
         
         self.lastTouchLocation = previousLocation
     }
-
+//When the user stops touching lol
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         lastTouchLocation = nil
     }
 
+    //for using two fingers to zoom
     @objc func handlePinchGesture(_ gestureRecognizer: UIPinchGestureRecognizer) {
         if gestureRecognizer.state == .began {
             initialCameraScale = cameraNode.xScale
@@ -115,6 +119,14 @@ class SolarSystemScene: SKScene {
         if gestureRecognizer.state == .changed {
             let newScale = initialCameraScale / gestureRecognizer.scale
             cameraNode.setScale(newScale)
+        }
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        super.update(currentTime)
+        
+        if let selectedPlanetNode = selectedPlanetNode {
+            cameraNode.position = selectedPlanetNode.position
         }
     }
 }

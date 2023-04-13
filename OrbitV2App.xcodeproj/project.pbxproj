@@ -31,6 +31,7 @@
 		586D878429DE26AF0069E68B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878329DE26AF0069E68B /* UserManager.swift */; };
 		5872649129E31D4E00B795D7 /* PlanetNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872649029E31D4E00B795D7 /* PlanetNode.swift */; };
 		58EDE6D529E62BCE005CE84A /* OrbitNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EDE6D429E62BCE005CE84A /* OrbitNode.swift */; };
+		58EDE6D729E64710005CE84A /* menuBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EDE6D629E64710005CE84A /* menuBox.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		586D878329DE26AF0069E68B /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		5872649029E31D4E00B795D7 /* PlanetNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetNode.swift; sourceTree = "<group>"; };
 		58EDE6D429E62BCE005CE84A /* OrbitNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbitNode.swift; sourceTree = "<group>"; };
+		58EDE6D629E64710005CE84A /* menuBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = menuBox.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +151,7 @@
 				581DCA1029E2339C006665C4 /* SolarSystemScene.swift */,
 				5872649029E31D4E00B795D7 /* PlanetNode.swift */,
 				58EDE6D429E62BCE005CE84A /* OrbitNode.swift */,
+				58EDE6D629E64710005CE84A /* menuBox.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 				586D878029DE1B780069E68B /* LoadingViewController.swift in Sources */,
 				5808599829D8713F00E6F2AD /* Ring.swift in Sources */,
 				580859A529D8780400E6F2AD /* LoadingView.swift in Sources */,
+				58EDE6D729E64710005CE84A /* menuBox.swift in Sources */,
 				580859A129D877CA00E6F2AD /* RingView.swift in Sources */,
 				586D878229DE20380069E68B /* User.swift in Sources */,
 				581DCA1129E2339C006665C4 /* SolarSystemScene.swift in Sources */,
