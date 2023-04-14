@@ -66,9 +66,9 @@ class SolarSystemScene: SKScene {
         addChild(planetNode3)
         
         // Create actions to make the planets follow the oval paths
-        let followPath1 = SKAction.follow(orbit1.path!, asOffset: false, orientToPath: false, duration: 20)
-        let followPath2 = SKAction.follow(orbit2.path!, asOffset: false, orientToPath: false, duration: 30)
-        let followPath3 = SKAction.follow(orbit3.path!, asOffset: false, orientToPath: false, duration: 40)
+        let followPath1 = SKAction.follow(orbit1.path!, asOffset: false, orientToPath: false, duration: 60)
+        let followPath2 = SKAction.follow(orbit2.path!, asOffset: false, orientToPath: false, duration: 69)
+        let followPath3 = SKAction.follow(orbit3.path!, asOffset: false, orientToPath: false, duration: 78)
         
         let repeatForever1 = SKAction.repeatForever(followPath1)
         let repeatForever2 = SKAction.repeatForever(followPath2)

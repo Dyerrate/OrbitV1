@@ -33,15 +33,16 @@ class PlanetNode: SKSpriteNode {
     func handleTap(with cameraNode: SKCameraNode, in scene: SolarSystemScene) {
         // Toggle between zoomed-in and default state
         if !isZoomed {
-            // Zoom in and follow the selected planet
-            let moveCamera = SKAction.move(to: position, duration: 1)
-            let scaleCamera = SKAction.scale(by: 0.5, duration: 1)
-            let group = SKAction.group([moveCamera, scaleCamera])
-            cameraNode.run(group)
+            let scaleCamera = SKAction.scale(to: 0.5, duration: 0.5)
+            cameraNode.run(scaleCamera)
+
+            let followPlanet = SKAction.customAction(withDuration: 0.5) { _, elapsedTime in
+                cameraNode.position = self.position
+            }
+            cameraNode.run(followPlanet)
             
             scene.selectedPlanetNode = self
         } else {
-            // Reset camera position and scale
             let moveCamera = SKAction.move(to: CGPoint.zero, duration: 1)
             let scaleCamera = SKAction.scale(to: 1.0, duration: 1)
             let group = SKAction.group([moveCamera, scaleCamera])
