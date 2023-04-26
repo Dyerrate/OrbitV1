@@ -8,8 +8,15 @@
 import UIKit
 import SpriteKit
 
-class SolarSystemViewController: UIViewController {
+protocol SolarSystemSceneDelegate: AnyObject {
+    func planetTapped()
+}
+
+class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, PlanetActionViewDelegate {
     private var skView: SKView!
+    private var notificationListView: NotificationListView?
+    private var planetActionView: PlanetActionView?
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,10 +31,65 @@ class SolarSystemViewController: UIViewController {
         skView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(skView)
     }
+    
+    private func showPlanetActionView() {
+        if planetActionView == nil {
+            planetActionView = PlanetActionView(frame: CGRect(x: 0, y: view.bounds.height, width: view.bounds.width, height: view.bounds.height * 0.3))
+            planetActionView?.delegate = self
+            view.addSubview(planetActionView!)
+        } else {
+            clearPlanetActionView()
+        }
 
+        UIView.animate(withDuration: 0.3) {
+            self.planetActionView?.frame.origin.y = self.view.bounds.height * 0.7
+        }
+    }
+    
+    //Clearing all displays after the planet is tapped while ~ZOOMED~
+    private func clearPlanetActionView() {
+        planetActionView?.removeFromSuperview()
+        planetActionView = nil
+        hideNotificationsListView()
+        planetActionView?.removeSubViews()
+    }
     private func presentSolarSystemScene() {
         let scene = SolarSystemScene(size: skView.bounds.size)
+        scene.solarSystemDelegate = self // Add this line
         scene.scaleMode = .aspectFill
         skView.presentScene(scene)
     }
+    //What runs when the planet is tapped
+    func planetTapped() {
+        print("planet tapped")
+        showPlanetActionView()
+    }
+    
+    func viewButtonTapped() {
+          showNotifications()
+      }
+    
+    func editButtonTapped() {
+    
+    }
+    func returnButtonTapped() {
+        planetActionView?.resetToInitialState()
+        hideNotificationsListView()
+    }
+    func hideNotificationsListView() {
+        notificationListView?.removeFromSuperview()
+        notificationListView = nil
+        print("showNotifications DELETE")
+    }
+    func showNotifications() {
+        if notificationListView == nil {
+            print("showNotifications APPEAR")
+            notificationListView = NotificationListView(frame: CGRect(x: 0, y: view.bounds.height, width: view.bounds.width, height: view.bounds.height * 0.35), loggedIn: true)
+            view.addSubview(notificationListView!)
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.notificationListView?.frame.origin.y = self.view.bounds.height / 1.2
+        }
+    }
 }
+

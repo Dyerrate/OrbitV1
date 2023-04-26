@@ -11,6 +11,7 @@ class SolarSystemScene: SKScene {
     private var planetNode1: PlanetNode!
     private var planetNode2: PlanetNode!
     private var planetNode3: PlanetNode!
+    weak var solarSystemDelegate: SolarSystemSceneDelegate?
     private var sun: SKSpriteNode!
     private var ring: SKSpriteNode!
     var cameraNode: SKCameraNode!
@@ -67,8 +68,8 @@ class SolarSystemScene: SKScene {
         
         // Create actions to make the planets follow the oval paths
         let followPath1 = SKAction.follow(orbit1.path!, asOffset: false, orientToPath: false, duration: 60)
-        let followPath2 = SKAction.follow(orbit2.path!, asOffset: false, orientToPath: false, duration: 69)
-        let followPath3 = SKAction.follow(orbit3.path!, asOffset: false, orientToPath: false, duration: 78)
+        let followPath2 = SKAction.follow(orbit2.path!, asOffset: false, orientToPath: false, duration: 1200)
+        let followPath3 = SKAction.follow(orbit3.path!, asOffset: false, orientToPath: false, duration: 300)
         
         let repeatForever1 = SKAction.repeatForever(followPath1)
         let repeatForever2 = SKAction.repeatForever(followPath2)
@@ -89,6 +90,7 @@ class SolarSystemScene: SKScene {
         let touchedNode = atPoint(location)
 
         if let planetNode = touchedNode as? PlanetNode {
+            print("Tapped on a planet from scene")
             planetNode.handleTap(with: cameraNode, in: self)
         }
     }

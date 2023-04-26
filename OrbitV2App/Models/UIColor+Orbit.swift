@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIColor {
-    
+    static let orbitRecord = UIColor(named: "OrbitRecord")!
     static let orbitBackground = UIColor(named: "OrbitBackground")!
     static let objectSecondary = UIColor(named: "ObjectSecondary")!
     static let objectPrimary = UIColor(named: "ObjectPrimary")!

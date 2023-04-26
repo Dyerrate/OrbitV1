@@ -26,8 +26,10 @@ class PlanetNode: SKSpriteNode {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let parentScene = scene as? SolarSystemScene {
+            print("tapped planet in node")
             handleTap(with: parentScene.cameraNode, in: parentScene)
-        }
+            parentScene.solarSystemDelegate?.planetTapped()
+        } 
     }
     
     func handleTap(with cameraNode: SKCameraNode, in scene: SolarSystemScene) {
@@ -40,7 +42,6 @@ class PlanetNode: SKSpriteNode {
                 cameraNode.position = self.position
             }
             cameraNode.run(followPlanet)
-            
             scene.selectedPlanetNode = self
         } else {
             let moveCamera = SKAction.move(to: CGPoint.zero, duration: 1)

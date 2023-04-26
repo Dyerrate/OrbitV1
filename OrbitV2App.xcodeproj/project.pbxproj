@@ -18,18 +18,21 @@
 		5808599A29D8715A00E6F2AD /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5808599929D8715A00E6F2AD /* Planet.swift */; };
 		5808599C29D8717300E6F2AD /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5808599B29D8717300E6F2AD /* Notification.swift */; };
 		5808599E29D8718600E6F2AD /* UIColor+Orbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5808599D29D8718600E6F2AD /* UIColor+Orbit.swift */; };
-		580859A129D877CA00E6F2AD /* RingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A029D877CA00E6F2AD /* RingView.swift */; };
 		580859A329D877E500E6F2AD /* PlanetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A229D877E500E6F2AD /* PlanetView.swift */; };
-		580859A529D8780400E6F2AD /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A429D8780400E6F2AD /* LoadingView.swift */; };
 		580859A829D879C900E6F2AD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A729D879C900E6F2AD /* NotificationManager.swift */; };
 		580859AA29D879E900E6F2AD /* SolarSystemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A929D879E900E6F2AD /* SolarSystemViewController.swift */; };
 		580859AC29D879FC00E6F2AD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859AB29D879FC00E6F2AD /* LoginViewController.swift */; };
 		580859AE29D87A1200E6F2AD /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859AD29D87A1200E6F2AD /* RegisterViewController.swift */; };
 		581DCA1129E2339C006665C4 /* SolarSystemScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DCA1029E2339C006665C4 /* SolarSystemScene.swift */; };
+		585765EC29F871EB0043175B /* EventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 585765EB29F871EB0043175B /* EventsView.swift */; };
+		585765EE29F872000043175B /* ContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 585765ED29F872000043175B /* ContactsView.swift */; };
+		585765F029F872150043175B /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 585765EF29F872150043175B /* GoalsView.swift */; };
 		586D878029DE1B780069E68B /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D877F29DE1B780069E68B /* LoadingViewController.swift */; };
 		586D878229DE20380069E68B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878129DE20380069E68B /* User.swift */; };
 		586D878429DE26AF0069E68B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878329DE26AF0069E68B /* UserManager.swift */; };
 		5872649129E31D4E00B795D7 /* PlanetNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872649029E31D4E00B795D7 /* PlanetNode.swift */; };
+		58AF7A1F29EC6F0E00828132 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58AF7A1E29EC6F0E00828132 /* NotificationListView.swift */; };
+		58C5953E29F203DA00AB49AA /* PlanetActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C5953D29F203DA00AB49AA /* PlanetActionView.swift */; };
 		58EDE6D529E62BCE005CE84A /* OrbitNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EDE6D429E62BCE005CE84A /* OrbitNode.swift */; };
 		58EDE6D729E64710005CE84A /* menuBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EDE6D629E64710005CE84A /* menuBox.swift */; };
 /* End PBXBuildFile section */
@@ -48,18 +51,21 @@
 		5808599929D8715A00E6F2AD /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
 		5808599B29D8717300E6F2AD /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		5808599D29D8718600E6F2AD /* UIColor+Orbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Orbit.swift"; sourceTree = "<group>"; };
-		580859A029D877CA00E6F2AD /* RingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingView.swift; sourceTree = "<group>"; };
 		580859A229D877E500E6F2AD /* PlanetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetView.swift; sourceTree = "<group>"; };
-		580859A429D8780400E6F2AD /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		580859A729D879C900E6F2AD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		580859A929D879E900E6F2AD /* SolarSystemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarSystemViewController.swift; sourceTree = "<group>"; };
 		580859AB29D879FC00E6F2AD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		580859AD29D87A1200E6F2AD /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		581DCA1029E2339C006665C4 /* SolarSystemScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarSystemScene.swift; sourceTree = "<group>"; };
+		585765EB29F871EB0043175B /* EventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsView.swift; sourceTree = "<group>"; };
+		585765ED29F872000043175B /* ContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsView.swift; sourceTree = "<group>"; };
+		585765EF29F872150043175B /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
 		586D877F29DE1B780069E68B /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		586D878129DE20380069E68B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		586D878329DE26AF0069E68B /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		5872649029E31D4E00B795D7 /* PlanetNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetNode.swift; sourceTree = "<group>"; };
+		58AF7A1E29EC6F0E00828132 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
+		58C5953D29F203DA00AB49AA /* PlanetActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetActionView.swift; sourceTree = "<group>"; };
 		58EDE6D429E62BCE005CE84A /* OrbitNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbitNode.swift; sourceTree = "<group>"; };
 		58EDE6D629E64710005CE84A /* menuBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = menuBox.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -129,9 +135,12 @@
 				580859AB29D879FC00E6F2AD /* LoginViewController.swift */,
 				580859AD29D87A1200E6F2AD /* RegisterViewController.swift */,
 				586D877F29DE1B780069E68B /* LoadingViewController.swift */,
-				580859A029D877CA00E6F2AD /* RingView.swift */,
 				580859A229D877E500E6F2AD /* PlanetView.swift */,
-				580859A429D8780400E6F2AD /* LoadingView.swift */,
+				58AF7A1E29EC6F0E00828132 /* NotificationListView.swift */,
+				58C5953D29F203DA00AB49AA /* PlanetActionView.swift */,
+				585765EB29F871EB0043175B /* EventsView.swift */,
+				585765ED29F872000043175B /* ContactsView.swift */,
+				585765EF29F872150043175B /* GoalsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -229,18 +238,21 @@
 			files = (
 				586D878429DE26AF0069E68B /* UserManager.swift in Sources */,
 				5872649129E31D4E00B795D7 /* PlanetNode.swift in Sources */,
+				585765EC29F871EB0043175B /* EventsView.swift in Sources */,
 				580859AC29D879FC00E6F2AD /* LoginViewController.swift in Sources */,
 				5808598529D870B600E6F2AD /* ViewController.swift in Sources */,
 				5808598129D870B600E6F2AD /* AppDelegate.swift in Sources */,
+				58AF7A1F29EC6F0E00828132 /* NotificationListView.swift in Sources */,
+				58C5953E29F203DA00AB49AA /* PlanetActionView.swift in Sources */,
 				586D878029DE1B780069E68B /* LoadingViewController.swift in Sources */,
 				5808599829D8713F00E6F2AD /* Ring.swift in Sources */,
-				580859A529D8780400E6F2AD /* LoadingView.swift in Sources */,
 				58EDE6D729E64710005CE84A /* menuBox.swift in Sources */,
-				580859A129D877CA00E6F2AD /* RingView.swift in Sources */,
 				586D878229DE20380069E68B /* User.swift in Sources */,
 				581DCA1129E2339C006665C4 /* SolarSystemScene.swift in Sources */,
 				580859AE29D87A1200E6F2AD /* RegisterViewController.swift in Sources */,
 				580859A329D877E500E6F2AD /* PlanetView.swift in Sources */,
+				585765EE29F872000043175B /* ContactsView.swift in Sources */,
+				585765F029F872150043175B /* GoalsView.swift in Sources */,
 				580859A829D879C900E6F2AD /* NotificationManager.swift in Sources */,
 				58EDE6D529E62BCE005CE84A /* OrbitNode.swift in Sources */,
 				5808599C29D8717300E6F2AD /* Notification.swift in Sources */,

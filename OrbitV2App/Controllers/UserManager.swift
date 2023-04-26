@@ -15,7 +15,6 @@ class UserManager {
      init() {
          fetchUsers()
          users.append(testUser)
-          
      }
 
     func registerUser(user: User, completion: ((Bool, Error?) -> Void)? = nil) {
