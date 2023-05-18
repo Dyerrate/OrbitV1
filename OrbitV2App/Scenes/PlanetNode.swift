@@ -28,18 +28,21 @@ class PlanetNode: SKSpriteNode {
         if let parentScene = scene as? SolarSystemScene {
             print("tapped planet in node")
             handleTap(with: parentScene.cameraNode, in: parentScene)
-            parentScene.solarSystemDelegate?.planetTapped()
-        } 
+            
+            // Pass the `name` property of the `planet` property directly
+            parentScene.solarSystemDelegate?.planetSelected(planetName: planet.name, orbitName: planet.orbit.name)
+
+        }
     }
     
     func handleTap(with cameraNode: SKCameraNode, in scene: SolarSystemScene) {
         // Toggle between zoomed-in and default state
         if !isZoomed {
-            let scaleCamera = SKAction.scale(to: 0.5, duration: 0.5)
+            let scaleCamera = SKAction.scale(to: 0.5, duration: 0.9)
             cameraNode.run(scaleCamera)
 
             let followPlanet = SKAction.customAction(withDuration: 0.5) { _, elapsedTime in
-                cameraNode.position = self.position
+                cameraNode.position = CGPoint(x: self.position.x, y: self.position.y - scene.size.height * 1/6)
             }
             cameraNode.run(followPlanet)
             scene.selectedPlanetNode = self

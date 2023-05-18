@@ -8,7 +8,14 @@
 import SpriteKit
 
 class OrbitNode: SKNode {
-    init(width: CGFloat, height: CGFloat, center: CGPoint, rotationAngle: CGFloat, strokeColor: UIColor) {
+    private let orbit: Orbit
+    private let width: CGFloat
+    private let height: CGFloat
+    
+    init(orbit: Orbit, width: CGFloat, height: CGFloat, center: CGPoint, rotationAngle: CGFloat, strokeColor: UIColor) {
+        self.orbit = orbit
+        self.width = width
+        self.height = height
         super.init()
         
         let orbit = createOvalPath(width: width, height: height, center: center, rotationAngle: rotationAngle, strokeColor: strokeColor)

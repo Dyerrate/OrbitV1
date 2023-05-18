@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 import SwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

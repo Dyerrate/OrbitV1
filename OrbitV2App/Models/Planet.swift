@@ -12,11 +12,13 @@ class Planet {
     let name: String
     let image: UIImage?
     var notifications: [UNNotificationRequest]
+    let orbit: Orbit
 
-    init(name: String, imageName: String) {
+    init(name: String, imageName: String, orbit: Orbit) {
         self.name = name
         self.image = UIImage(named: imageName)
         self.notifications = []
+        self.orbit = orbit
     }
     
     func addNotification(_ notification: UNNotificationRequest) {

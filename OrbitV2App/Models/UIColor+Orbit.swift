@@ -25,5 +25,6 @@ extension UIColor {
     static let orbitLoginButtonBackground = UIColor.objectPrimary
     static let orbitLoginButtonTitle = UIColor.white
     static let orbitForgotPasswordButtonTitle = UIColor.objectSecondary
-    
+    static let spacePurple1 = UIColor(red: 0.5, green: 0.1, blue: 0.7, alpha: 1.0)
+    static let spacePurple2 = UIColor(red: 0.2, green: 0.1, blue: 0.5, alpha: 1.0)
 }

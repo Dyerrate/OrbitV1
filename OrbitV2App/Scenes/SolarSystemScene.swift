@@ -37,39 +37,44 @@ class SolarSystemScene: SKScene {
         sun.yScale = 0.008
         addChild(sun)
         
-        let orbit1 = OrbitNode(width: width, height: height, center: center, rotationAngle: rotationAngle, strokeColor: .white)
-        addChild(orbit1)
+        let orbit1 = Orbit(name: "Orbit 1", width: width, height: height)
+        let orbit2 = Orbit(name: "Orbit 2", width: width / 1.5, height: height / 1.5)
+        let orbit3 = Orbit(name: "Orbit 3", width: width / 3.5, height: height / 3.5)
+
+        let orbitNode1 = OrbitNode(orbit: orbit1, width: width, height: height, center: center, rotationAngle: rotationAngle, strokeColor: .white)
+        addChild(orbitNode1)
+
+        let orbitNode2 = OrbitNode(orbit: orbit2, width: width / 1.5, height: height / 1.5, center: center, rotationAngle: rotationAngle, strokeColor: .white)
+        addChild(orbitNode2)
+
+        let orbitNode3 = OrbitNode(orbit: orbit3, width: width / 3.5, height: height / 3.5, center: center, rotationAngle: rotationAngle, strokeColor: .white)
+        addChild(orbitNode3)
         
-        let orbit2 = OrbitNode(width: width / 1.5, height: height / 1.5, center: center, rotationAngle: rotationAngle, strokeColor: .white)
-        addChild(orbit2)
-        
-        let orbit3 = OrbitNode(width: width / 3.5, height: height / 3.5, center: center, rotationAngle: rotationAngle, strokeColor: .white)
-        addChild(orbit3)
         
         // Add planetNode1
-        planetNode1 = PlanetNode(planet: Planet(name: "planet1", imageName: "planet1"), imageNamed: "planet1", view: view)
+        planetNode1 = PlanetNode(planet: Planet(name: "planet1", imageName: "planet1", orbit: orbit1), imageNamed: "planet1", view: view)
         planetNode1.xScale = 0.01
         planetNode1.yScale = 0.01
         addChild(planetNode1)
         
         // Add planetNode2
-        planetNode2 = PlanetNode(planet: Planet(name: "planet2", imageName: "planet2"), imageNamed: "planet2", view: view)
+        planetNode2 = PlanetNode(planet: Planet(name: "planet2", imageName: "planet2", orbit: orbit2), imageNamed: "planet2", view: view)
         planetNode2.position = CGPoint(x: size.width / 2, y: size.height / 2 + 100)
         planetNode2.xScale = 0.01
         planetNode2.yScale = 0.01
         addChild(planetNode2)
         
         // Add planetNode3
-        planetNode3 = PlanetNode(planet: Planet(name: "planet3", imageName: "planet3"), imageNamed: "planet3", view: view)
+        planetNode3 = PlanetNode(planet: Planet(name: "planet3", imageName: "planet3", orbit: orbit3), imageNamed: "planet3", view: view)
         planetNode3.position = CGPoint(x: size.width / 2 + 100, y: size.height / 2)
         planetNode3.xScale = 0.01
         planetNode3.yScale = 0.01
         addChild(planetNode3)
         
         // Create actions to make the planets follow the oval paths
-        let followPath1 = SKAction.follow(orbit1.path!, asOffset: false, orientToPath: false, duration: 60)
-        let followPath2 = SKAction.follow(orbit2.path!, asOffset: false, orientToPath: false, duration: 1200)
-        let followPath3 = SKAction.follow(orbit3.path!, asOffset: false, orientToPath: false, duration: 300)
+        let followPath1 = SKAction.follow(orbitNode1.path!, asOffset: false, orientToPath: false, duration: 60)
+        let followPath2 = SKAction.follow(orbitNode2.path!, asOffset: false, orientToPath: false, duration: 1200)
+        let followPath3 = SKAction.follow(orbitNode3.path!, asOffset: false, orientToPath: false, duration: 300)
         
         let repeatForever1 = SKAction.repeatForever(followPath1)
         let repeatForever2 = SKAction.repeatForever(followPath2)
@@ -94,6 +99,7 @@ class SolarSystemScene: SKScene {
             planetNode.handleTap(with: cameraNode, in: self)
         }
     }
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
@@ -107,10 +113,12 @@ class SolarSystemScene: SKScene {
         
         self.lastTouchLocation = previousLocation
     }
+    
 //When the user stops touching lol
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         lastTouchLocation = nil
     }
+    
 
     //for using two fingers to zoom
     @objc func handlePinchGesture(_ gestureRecognizer: UIPinchGestureRecognizer) {
@@ -128,7 +136,7 @@ class SolarSystemScene: SKScene {
         super.update(currentTime)
         
         if let selectedPlanetNode = selectedPlanetNode {
-            cameraNode.position = selectedPlanetNode.position
+            cameraNode.position = CGPoint(x: selectedPlanetNode.position.x, y: selectedPlanetNode.position.y - size.height * 1/6)
         }
     }
 }

@@ -9,6 +9,7 @@ import UIKit
 import SpriteKit
 
 protocol SolarSystemSceneDelegate: AnyObject {
+    func planetSelected(planetName: String, orbitName: String)
     func planetTapped()
 }
 
@@ -16,6 +17,21 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
     private var skView: SKView!
     private var notificationListView: NotificationListView?
     private var planetActionView: PlanetActionView?
+    private var selectedPlanetName: String?
+    private var selectedPlanetOrbit: String?
+    
+    func planetSelected(planetName: String, orbitName: String) {
+        selectedPlanetName = planetName
+        selectedPlanetOrbit = orbitName
+        planetTapped()
+    }
+
+    func planetTapped() {
+        print("planet tapped")
+        showPlanetActionView()
+        planetActionView?.updatePlanetName(planetName: selectedPlanetName)
+        planetActionView?.updateOrbitName(orbitName: selectedPlanetOrbit)
+    }
 
 
     override func viewDidLoad() {
@@ -34,7 +50,7 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
     
     private func showPlanetActionView() {
         if planetActionView == nil {
-            planetActionView = PlanetActionView(frame: CGRect(x: 0, y: view.bounds.height, width: view.bounds.width, height: view.bounds.height * 0.3))
+            planetActionView = PlanetActionView(frame: CGRect(x: 0, y: view.bounds.height, width: view.bounds.width, height: view.bounds.height * 2/3))
             planetActionView?.delegate = self
             view.addSubview(planetActionView!)
         } else {
@@ -42,7 +58,7 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         }
 
         UIView.animate(withDuration: 0.3) {
-            self.planetActionView?.frame.origin.y = self.view.bounds.height * 0.7
+            self.planetActionView?.frame.origin.y = self.view.bounds.height * 1/3
         }
     }
     
@@ -51,18 +67,13 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         planetActionView?.removeFromSuperview()
         planetActionView = nil
         hideNotificationsListView()
-        planetActionView?.removeSubViews()
+//        planetActionView?.removeSubViews()
     }
     private func presentSolarSystemScene() {
         let scene = SolarSystemScene(size: skView.bounds.size)
         scene.solarSystemDelegate = self // Add this line
         scene.scaleMode = .aspectFill
         skView.presentScene(scene)
-    }
-    //What runs when the planet is tapped
-    func planetTapped() {
-        print("planet tapped")
-        showPlanetActionView()
     }
     
     func viewButtonTapped() {
@@ -73,7 +84,7 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
     
     }
     func returnButtonTapped() {
-        planetActionView?.resetToInitialState()
+//        planetActionView?.resetToInitialState()
         hideNotificationsListView()
     }
     func hideNotificationsListView() {
@@ -91,5 +102,7 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
             self.notificationListView?.frame.origin.y = self.view.bounds.height / 1.2
         }
     }
+
+    
 }
 
