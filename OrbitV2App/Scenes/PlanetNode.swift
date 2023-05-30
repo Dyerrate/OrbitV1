@@ -30,7 +30,7 @@ class PlanetNode: SKSpriteNode {
             handleTap(with: parentScene.cameraNode, in: parentScene)
             
             // Pass the `name` property of the `planet` property directly
-            parentScene.solarSystemDelegate?.planetSelected(planetName: planet.name, orbitName: planet.orbit.name)
+//            parentScene.solarSystemDelegate?.planetSelected(planetName: planet.name, orbitName: planet.orbit.name)
 
         }
     }

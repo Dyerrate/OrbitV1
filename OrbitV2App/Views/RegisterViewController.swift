@@ -215,15 +215,15 @@ class RegisterViewController: UIViewController {
     }
     
     func saveUserData(firstName: String, lastName: String, email: String, phoneNumber: String, password: String) {
-        let user = User(email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber)
-        
-        UserManager.shared.registerUser(user: user) { (success, error) in
-            if success {
-                print("User registration successful")
-            } else if let error = error {
-                print("User registration failed: \(error.localizedDescription)")
-            }
-        }
+//        let user = User(email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber)
+//
+//        UserManager.shared.registerUser(user: user) { (success, error) in
+//            if success {
+//                print("User registration successful")
+//            } else if let error = error {
+//                print("User registration failed: \(error.localizedDescription)")
+//            }
+//        }
     }
 }
     

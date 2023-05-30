@@ -18,12 +18,21 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
     private var notificationListView: NotificationListView?
     private var planetActionView: PlanetActionView?
     private var selectedPlanetName: String?
+    var user: User?
+    var planetOrbitDictionary: [Planet: Orbit] = [:]
     private var selectedPlanetOrbit: String?
     
     func planetSelected(planetName: String, orbitName: String) {
-        selectedPlanetName = planetName
-        selectedPlanetOrbit = orbitName
-        planetTapped()
+//        print("these are the sent planets: ", planets!)
+//        guard let planets = planets else { return }
+//
+//        if let planet = planets.first(where: { $0.name == planetName && $0.orbit.name == orbitName }) {
+//            selectedPlanetName = planet.name
+//            selectedPlanetOrbit = planet.orbit.name
+//            planetTapped()
+//        } else {
+//            print("Planet not found")
+//        }
     }
 
     func planetTapped() {
@@ -37,7 +46,6 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        
         setupSKView()
         presentSolarSystemScene()
     }
@@ -71,8 +79,11 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
     }
     private func presentSolarSystemScene() {
         let scene = SolarSystemScene(size: skView.bounds.size)
-        scene.solarSystemDelegate = self // Add this line
+        scene.solarSystemDelegate = self
         scene.scaleMode = .aspectFill
+        // Pass the user and planetOrbitDictionary to the scene
+        scene.user = user
+        scene.planetOrbitDictionary = planetOrbitDictionary
         skView.presentScene(scene)
     }
     
@@ -95,7 +106,7 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
     func showNotifications() {
         if notificationListView == nil {
             print("showNotifications APPEAR")
-            notificationListView = NotificationListView(frame: CGRect(x: 0, y: view.bounds.height, width: view.bounds.width, height: view.bounds.height * 0.35), loggedIn: true)
+            notificationListView = NotificationListView(frame: CGRect(x: 0, y: view.bounds.height, width: view.bounds.width, height: view.bounds.height * 0.35), loggedIn: user != nil)
             view.addSubview(notificationListView!)
         }
         UIView.animate(withDuration: 0.3) {

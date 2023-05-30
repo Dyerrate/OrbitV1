@@ -8,9 +8,6 @@
 import SpriteKit
 
 class SolarSystemScene: SKScene {
-    private var planetNode1: PlanetNode!
-    private var planetNode2: PlanetNode!
-    private var planetNode3: PlanetNode!
     weak var solarSystemDelegate: SolarSystemSceneDelegate?
     private var sun: SKSpriteNode!
     private var ring: SKSpriteNode!
@@ -18,6 +15,9 @@ class SolarSystemScene: SKScene {
     private var lastTouchLocation: CGPoint?
     private var initialCameraScale: CGFloat = 1.0
     var selectedPlanetNode: PlanetNode?
+    
+    var user: User?
+    var planetOrbitDictionary: [Planet: Orbit] = [:]
 
     
     override func didMove(to view: SKView) {
@@ -26,64 +26,35 @@ class SolarSystemScene: SKScene {
         camera = cameraNode
         addChild(cameraNode)
         
+//KEEP FOR NOW
         let width: CGFloat = size.width / 2
         let height: CGFloat = size.height / 2
+        
         let center = CGPoint(x:0, y: 0)
         let rotationAngle = -45 * CGFloat.pi / 180
-        
+        var orbitDuration: Double = 60
+        var positions: Double = 0
+
         sun = SKSpriteNode(imageNamed: "sun1")
         sun.position = CGPoint(x:0, y: 0)
         sun.xScale = 0.008
         sun.yScale = 0.008
         addChild(sun)
-        
-        let orbit1 = Orbit(name: "Orbit 1", width: width, height: height)
-        let orbit2 = Orbit(name: "Orbit 2", width: width / 1.5, height: height / 1.5)
-        let orbit3 = Orbit(name: "Orbit 3", width: width / 3.5, height: height / 3.5)
+        for (planet, orbit) in planetOrbitDictionary {
+                let orbitNode = OrbitNode(orbit: orbit, center: center, rotationAngle: rotationAngle, strokeColor: .white)
+                addChild(orbitNode)
 
-        let orbitNode1 = OrbitNode(orbit: orbit1, width: width, height: height, center: center, rotationAngle: rotationAngle, strokeColor: .white)
-        addChild(orbitNode1)
+            let planetNode = PlanetNode(planet: planet, imageNamed: planet.image!, view: view)
+                planetNode.position = CGPoint(x: size.width / 2, y: size.height / 2 + 100)
+                planetNode.xScale = 0.01
+                planetNode.yScale = 0.01
+                addChild(planetNode)
 
-        let orbitNode2 = OrbitNode(orbit: orbit2, width: width / 1.5, height: height / 1.5, center: center, rotationAngle: rotationAngle, strokeColor: .white)
-        addChild(orbitNode2)
-
-        let orbitNode3 = OrbitNode(orbit: orbit3, width: width / 3.5, height: height / 3.5, center: center, rotationAngle: rotationAngle, strokeColor: .white)
-        addChild(orbitNode3)
-        
-        
-        // Add planetNode1
-        planetNode1 = PlanetNode(planet: Planet(name: "planet1", imageName: "planet1", orbit: orbit1), imageNamed: "planet1", view: view)
-        planetNode1.xScale = 0.01
-        planetNode1.yScale = 0.01
-        addChild(planetNode1)
-        
-        // Add planetNode2
-        planetNode2 = PlanetNode(planet: Planet(name: "planet2", imageName: "planet2", orbit: orbit2), imageNamed: "planet2", view: view)
-        planetNode2.position = CGPoint(x: size.width / 2, y: size.height / 2 + 100)
-        planetNode2.xScale = 0.01
-        planetNode2.yScale = 0.01
-        addChild(planetNode2)
-        
-        // Add planetNode3
-        planetNode3 = PlanetNode(planet: Planet(name: "planet3", imageName: "planet3", orbit: orbit3), imageNamed: "planet3", view: view)
-        planetNode3.position = CGPoint(x: size.width / 2 + 100, y: size.height / 2)
-        planetNode3.xScale = 0.01
-        planetNode3.yScale = 0.01
-        addChild(planetNode3)
-        
-        // Create actions to make the planets follow the oval paths
-        let followPath1 = SKAction.follow(orbitNode1.path!, asOffset: false, orientToPath: false, duration: 60)
-        let followPath2 = SKAction.follow(orbitNode2.path!, asOffset: false, orientToPath: false, duration: 1200)
-        let followPath3 = SKAction.follow(orbitNode3.path!, asOffset: false, orientToPath: false, duration: 300)
-        
-        let repeatForever1 = SKAction.repeatForever(followPath1)
-        let repeatForever2 = SKAction.repeatForever(followPath2)
-        let repeatForever3 = SKAction.repeatForever(followPath3)
-        
-        planetNode1.run(repeatForever1)
-        planetNode2.run(repeatForever2)
-        planetNode3.run(repeatForever3)
-        
+                let followPath = SKAction.follow(orbitNode.path!, asOffset: false, orientToPath: false, duration: orbitDuration)
+                orbitDuration = orbitDuration * 2
+                let repeatForever = SKAction.repeatForever(followPath)
+                planetNode.run(repeatForever)
+            }
         let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         view.addGestureRecognizer(pinchGestureRecognizer)
         

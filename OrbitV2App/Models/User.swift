@@ -4,41 +4,38 @@
 //
 //  Created by Samuel Dyer on 4/5/23.
 //
-
 import Foundation
+import CloudKit
+
 struct User {
-    let email: String
-    let password: String
-    let firstName: String
-    let lastName: String
-    let phoneNumber: String
+    var email: String
+    var fullName: String
+    let uuid: String
+    var planets: [CKRecord.Reference] // <-- new
 
     var dictionaryRepresentation: [String: Any] {
         return [
             "email": email,
-            "password": password,
-            "firstName": firstName,
-            "lastName": lastName,
-            "phoneNumber": phoneNumber
+            "fullName": fullName,
+            "uuid": uuid,
+            "planets": planets // <-- new
         ]
     }
     
-    init(email: String, password: String, firstName: String, lastName: String, phoneNumber: String) {
+    init(email: String, fullName: String, uuid: String, planets: [CKRecord.Reference]) { // <-- new
         self.email = email
-        self.password = password
-        self.firstName = firstName
-        self.lastName = lastName
-        self.phoneNumber = phoneNumber
+        self.fullName = fullName
+        self.uuid = uuid
+        self.planets = planets // <-- new
     }
 
     init?(dictionary: [String: Any]) {
         guard let email = dictionary["email"] as? String,
-            let password = dictionary["password"] as? String,
-            let firstName = dictionary["firstName"] as? String,
-            let lastName = dictionary["lastName"] as? String,
-            let phoneNumber = dictionary["phoneNumber"] as? String
+              let fullName = dictionary["fullName"] as? String,
+              let uuid = dictionary["uuid"] as? String,
+              let planets = dictionary["planets"] as? [CKRecord.Reference] // <-- new
         else { return nil }
 
-        self.init(email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber)
+        self.init(email: email, fullName: fullName, uuid: uuid, planets: planets) // <-- new
     }
 }

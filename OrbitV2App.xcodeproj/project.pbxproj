@@ -116,12 +116,12 @@
 				5808599429D8711B00E6F2AD /* Models */,
 				5808598029D870B600E6F2AD /* AppDelegate.swift */,
 				5808598229D870B600E6F2AD /* SceneDelegate.swift */,
+				582155C82A16EE33007D1150 /* AuthenticationService.swift */,
 				5808598429D870B600E6F2AD /* ViewController.swift */,
 				5808598629D870B700E6F2AD /* Main.storyboard */,
 				5808598929D870B800E6F2AD /* Assets.xcassets */,
 				5808598B29D870B800E6F2AD /* LaunchScreen.storyboard */,
 				5808598E29D870B800E6F2AD /* Info.plist */,
-				582155C82A16EE33007D1150 /* AuthenticationService.swift */,
 			);
 			path = OrbitV2App;
 			sourceTree = "<group>";

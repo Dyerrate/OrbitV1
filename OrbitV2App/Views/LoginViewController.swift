@@ -7,8 +7,11 @@
 
 import UIKit
 import SafariServices
+import AuthenticationServices
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+
+    
     private let emailTextField = UITextField()
     private let passwordTextField = UITextField()
     private let loginButton = UIButton(type: .system)
@@ -85,6 +88,14 @@ class LoginViewController: UIViewController {
             containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             containerView.heightAnchor.constraint(equalToConstant: 230)
         ])
+        let appleSignInButton = ASAuthorizationAppleIDButton()
+        appleSignInButton.addTarget(self, action: #selector(handleAppleSignInButton), for: .touchUpInside)
+        appleSignInButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(appleSignInButton)
+        NSLayoutConstraint.activate([
+            appleSignInButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            appleSignInButton.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 20),
+        ])
         let stackView = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, loginButton, forgotPasswordButton, registerButton])
          stackView.axis = .vertical
          stackView.spacing = 12
@@ -136,6 +147,45 @@ class LoginViewController: UIViewController {
             
         ])
     }
+    @objc func handleAppleSignInButton() {
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email]
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = self
+        controller.presentationContextProvider = self
+        controller.performRequests()
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            var fullName = ""
+            if let givenName = appleIDCredential.fullName?.givenName,
+               let familyName = appleIDCredential.fullName?.familyName {
+                fullName = "\(givenName) \(familyName)"
+            }
+            let userIdentifier = appleIDCredential.user
+            let email = appleIDCredential.email
+
+            UserManager.shared.getUser(by: userIdentifier, fullName: fullName, email: email) { result in
+                switch result {
+                case .success(let user):
+                    if let user = user {
+                        DispatchQueue.main.async {
+                            self.showLoadingScreen(for: user)
+                        }
+                    } else {
+                        print("Failed to fetch or create user")
+                    }
+                case .failure(let error):
+                    print("Error: \(error)")
+                }
+            }
+        }
+    }
+
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // Handle error.
+    }
     
     @objc func loginButtonTapped() {
         UIView.animate(withDuration: 0.1, animations: {
@@ -145,32 +195,16 @@ class LoginViewController: UIViewController {
                 self.loginButton.transform = CGAffineTransform.identity
             }) { _ in
                 // Perform your login action here
-                self.loginUser()
+//                self.loginUser()
             }
         }
+        emailTextField.isHidden = true
+        loginButton.isHidden = true
+        forgotPasswordButton.isHidden = true
+        passwordTextField.isHidden = true
+        registerButton.isHidden = true
     }
 
-    @objc private func loginUser() {
-        // Authenticate user and call checkNotificationAccess() on success
-        guard let email = emailTextField.text, let password = passwordTextField.text else {
-            // Handle empty email or password fields
-            return
-        }
-        UserManager.shared.authenticateUser(email: email, password: password) { result in
-            switch result {
-            case .success(let user):
-                // Handle successful login, e.g., present the loading screen
-                DispatchQueue.main.async {
-                    self.showLoadingScreen(for: user)
-                }
-            case .failure(let error):
-                // Handle login error
-                DispatchQueue.main.async {
-                    self.showLoginError(error: error)
-                }
-            }
-        }
-    }
     @objc func registerButtonTapped() {
         let registerVC = RegisterViewController()
         let navigationController = UINavigationController(rootViewController: registerVC)
@@ -180,6 +214,9 @@ class LoginViewController: UIViewController {
 
     private func showLoadingScreen(for user: User) {
         let loadingViewController = LoadingViewController()
+        loadingViewController.currentUser = user
+        print("we pass in the user: ", user)
+        print("show loading screen")
         navigationController?.pushViewController(loadingViewController, animated: true)
     }
     
@@ -217,6 +254,11 @@ class LoginViewController: UIViewController {
             let safariVC = SFSafariViewController(url: url)
             self.present(safariVC, animated: true, completion: nil)
         }
+    }
+
+    
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
     }
 }
 
