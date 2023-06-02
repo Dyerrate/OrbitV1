@@ -15,7 +15,7 @@ class SolarSystemScene: SKScene {
     private var lastTouchLocation: CGPoint?
     private var initialCameraScale: CGFloat = 1.0
     var selectedPlanetNode: PlanetNode?
-    
+    let inclinationAngle: CGFloat = -35 * CGFloat.pi / 180
     var user: User?
     var planetOrbitDictionary: [Planet: Orbit] = [:]
 
@@ -25,39 +25,34 @@ class SolarSystemScene: SKScene {
         cameraNode = SKCameraNode()
         camera = cameraNode
         addChild(cameraNode)
-        
-//KEEP FOR NOW
-        let width: CGFloat = size.width / 2
-        let height: CGFloat = size.height / 2
-        
         let center = CGPoint(x:0, y: 0)
-        let rotationAngle = -45 * CGFloat.pi / 180
         var orbitDuration: Double = 60
-        var positions: Double = 0
-
         sun = SKSpriteNode(imageNamed: "sun1")
         sun.position = CGPoint(x:0, y: 0)
         sun.xScale = 0.008
         sun.yScale = 0.008
         addChild(sun)
         for (planet, orbit) in planetOrbitDictionary {
-                let orbitNode = OrbitNode(orbit: orbit, center: center, rotationAngle: rotationAngle, strokeColor: .white)
-                addChild(orbitNode)
-
+            let orbitNode = OrbitNode(orbit: orbit, center: center, strokeColor: .white)
+            orbitNode.zRotation = inclinationAngle
+            addChild(orbitNode)
+            
             let planetNode = PlanetNode(planet: planet, imageNamed: planet.image!, view: view)
-                planetNode.position = CGPoint(x: size.width / 2, y: size.height / 2 + 100)
-                planetNode.xScale = 0.01
-                planetNode.yScale = 0.01
-                addChild(planetNode)
+            let orbitPath = orbitNode.getOrbitPath().rotatedPath(by: orbitNode.orbitRotation)
+            let initialPosition = pointOnPath(path: orbitPath, atPercentOfLength: 0.0)
+            planetNode.position = initialPosition
+            planetNode.xScale = 0.01
+            planetNode.yScale = 0.01
+            addChild(planetNode)
 
-                let followPath = SKAction.follow(orbitNode.path!, asOffset: false, orientToPath: false, duration: orbitDuration)
-                orbitDuration = orbitDuration * 2
-                let repeatForever = SKAction.repeatForever(followPath)
-                planetNode.run(repeatForever)
-            }
+            let followPath = SKAction.follow(orbitPath, asOffset: false, orientToPath: false, duration: orbitDuration)
+            let repeatForever = SKAction.repeatForever(followPath)
+            planetNode.run(repeatForever)
+            
+            orbitDuration = orbitDuration * 2
+        }
         let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(_:)))
         view.addGestureRecognizer(pinchGestureRecognizer)
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -110,4 +105,51 @@ class SolarSystemScene: SKScene {
             cameraNode.position = CGPoint(x: selectedPlanetNode.position.x, y: selectedPlanetNode.position.y - size.height * 1/6)
         }
     }
+    func pointOnPath(path: CGPath, atPercentOfLength percent: CGFloat) -> CGPoint {
+        let t = min(max(percent, 0), 1)
+        return pointAtPercentOfPath(path: path, percent: t)
+    }
+
+    func pointAtPercentOfPath(path: CGPath, percent: CGFloat) -> CGPoint {
+        var point = CGPoint.zero
+        var previousPoint = CGPoint.zero
+        var totalLength: CGFloat = 0
+        var lengths: [CGFloat] = []
+
+        path.applyWithBlock { elementPointer in
+            let element = elementPointer.pointee
+            switch element.type {
+            case .moveToPoint:
+                previousPoint = element.points[0]
+            case .addLineToPoint:
+                let currentPoint = element.points[0]
+                let distance = hypot(currentPoint.x - previousPoint.x, currentPoint.y - previousPoint.y)
+                totalLength += distance
+                lengths.append(totalLength)
+                previousPoint = currentPoint
+            default:
+                break
+            }
+        }
+
+        let targetLength = percent * totalLength
+        var index = 0
+        while index < lengths.count && lengths[index] < targetLength {
+            index += 1
+        }
+
+        if index == 0 {
+            point = path.currentPoint
+        } else {
+            let currentPoint = path.currentPoint
+            let remainingLength = targetLength - lengths[index - 1]
+            let totalSegmentLength = lengths[index] - lengths[index - 1]
+            let t = remainingLength / totalSegmentLength
+            point.x = previousPoint.x + (currentPoint.x - previousPoint.x) * t
+            point.y = previousPoint.y + (currentPoint.y - previousPoint.y) * t
+        }
+
+        return point
+    }
 }
+

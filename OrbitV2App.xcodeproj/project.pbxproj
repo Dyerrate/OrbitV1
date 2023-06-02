@@ -31,6 +31,7 @@
 		586D878229DE20380069E68B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878129DE20380069E68B /* User.swift */; };
 		586D878429DE26AF0069E68B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878329DE26AF0069E68B /* UserManager.swift */; };
 		5872649129E31D4E00B795D7 /* PlanetNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872649029E31D4E00B795D7 /* PlanetNode.swift */; };
+		587B90A02A27FA8D0096B6D7 /* ExtensionsForApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587B909F2A27FA8D0096B6D7 /* ExtensionsForApp.swift */; };
 		588D892229FB33420069BC14 /* FloatingActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588D892129FB33420069BC14 /* FloatingActionButton.swift */; };
 		588D89242A01E0C60069BC14 /* Orbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588D89232A01E0C60069BC14 /* Orbit.swift */; };
 		588D89262A02C4720069BC14 /* PlanetActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588D89252A02C4720069BC14 /* PlanetActionViewController.swift */; };
@@ -68,6 +69,7 @@
 		586D878129DE20380069E68B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		586D878329DE26AF0069E68B /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		5872649029E31D4E00B795D7 /* PlanetNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetNode.swift; sourceTree = "<group>"; };
+		587B909F2A27FA8D0096B6D7 /* ExtensionsForApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionsForApp.swift; sourceTree = "<group>"; };
 		588D892129FB33420069BC14 /* FloatingActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingActionButton.swift; sourceTree = "<group>"; };
 		588D89232A01E0C60069BC14 /* Orbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orbit.swift; sourceTree = "<group>"; };
 		588D89252A02C4720069BC14 /* PlanetActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetActionViewController.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				581DCA1029E2339C006665C4 /* SolarSystemScene.swift */,
+				587B909F2A27FA8D0096B6D7 /* ExtensionsForApp.swift */,
 				5872649029E31D4E00B795D7 /* PlanetNode.swift */,
 				58EDE6D429E62BCE005CE84A /* OrbitNode.swift */,
 				58EDE6D629E64710005CE84A /* menuBox.swift */,
@@ -270,6 +273,7 @@
 				588D89262A02C4720069BC14 /* PlanetActionViewController.swift in Sources */,
 				58EDE6D729E64710005CE84A /* menuBox.swift in Sources */,
 				586D878229DE20380069E68B /* User.swift in Sources */,
+				587B90A02A27FA8D0096B6D7 /* ExtensionsForApp.swift in Sources */,
 				581DCA1129E2339C006665C4 /* SolarSystemScene.swift in Sources */,
 				58583B672A0AFA0F003436CB /* ContactsViewModel.swift in Sources */,
 				580859AE29D87A1200E6F2AD /* RegisterViewController.swift in Sources */,

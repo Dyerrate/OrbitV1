@@ -11,40 +11,33 @@ class OrbitNode: SKNode {
     private let orbit: Orbit
     private let width: CGFloat
     private let height: CGFloat
-    
-    init(orbit: Orbit, center: CGPoint, rotationAngle: CGFloat, strokeColor: UIColor) {
+    var orbitRotation: CGFloat {
+        return zRotation
+    }
+    init(orbit: Orbit, center: CGPoint, strokeColor: UIColor) {
         self.orbit = orbit
         self.width = orbit.width
-        self.height = orbit.height
+        self.height = orbit.height * 1.5 // Multiply the height by a factor (1.5) to make the path oval
         super.init()
         print("this is the width: ", width)
         print("this is the height: ", height)
 
-        let orbit = createOvalPath(width: width, height: height, center: center, rotationAngle: rotationAngle, strokeColor: strokeColor)
-        addChild(orbit)
-        
-        self.path = createOvalPath(width: width, height: height, center: center, rotationAngle: rotationAngle, strokeColor: .clear).path
+        let orbitPath = createOvalPath(width: width, height: height, center: center, strokeColor: strokeColor)
+        addChild(orbitPath)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var path: CGPath?
-    
-    private func createOvalPath(width: CGFloat, height: CGFloat, center: CGPoint, rotationAngle: CGFloat, strokeColor: UIColor) -> SKShapeNode {
+    private func createOvalPath(width: CGFloat, height: CGFloat, center: CGPoint, strokeColor: UIColor) -> SKShapeNode {
         let path = UIBezierPath(ovalIn: CGRect(x: center.x - width / 2, y: center.y - height / 2, width: width, height: height))
-        let newPath = CGMutablePath()
-        
-        // Apply rotation and translation to the path
-        let transform = CGAffineTransform(rotationAngle: rotationAngle)
-            .translatedBy(x: center.x, y: center.y)
-            .translatedBy(x: -center.x, y: -center.y)
-        newPath.addPath(path.cgPath, transform: transform)
-        
-        let shapeNode = SKShapeNode(path: newPath)
+        let shapeNode = SKShapeNode(path: path.cgPath)
         shapeNode.strokeColor = strokeColor
         shapeNode.lineWidth = 1
         return shapeNode
+    }
+    func getOrbitPath() -> CGPath {
+        return (children.first as! SKShapeNode).path!
     }
 }
