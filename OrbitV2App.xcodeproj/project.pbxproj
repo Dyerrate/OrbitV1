@@ -30,6 +30,8 @@
 		586D878029DE1B780069E68B /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D877F29DE1B780069E68B /* LoadingViewController.swift */; };
 		586D878229DE20380069E68B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878129DE20380069E68B /* User.swift */; };
 		586D878429DE26AF0069E68B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878329DE26AF0069E68B /* UserManager.swift */; };
+		58719B972A2EC95E0049FCA1 /* RussoOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58719B962A2EC95E0049FCA1 /* RussoOne-Regular.ttf */; };
+		58719B992A30C6230049FCA1 /* StarcruiserExpandedSemiItalic-gKeY.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58719B982A30C6230049FCA1 /* StarcruiserExpandedSemiItalic-gKeY.ttf */; };
 		5872649129E31D4E00B795D7 /* PlanetNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872649029E31D4E00B795D7 /* PlanetNode.swift */; };
 		587B90A02A27FA8D0096B6D7 /* ExtensionsForApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587B909F2A27FA8D0096B6D7 /* ExtensionsForApp.swift */; };
 		588D892229FB33420069BC14 /* FloatingActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588D892129FB33420069BC14 /* FloatingActionButton.swift */; };
@@ -68,6 +70,8 @@
 		586D877F29DE1B780069E68B /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		586D878129DE20380069E68B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		586D878329DE26AF0069E68B /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		58719B962A2EC95E0049FCA1 /* RussoOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RussoOne-Regular.ttf"; sourceTree = "<group>"; };
+		58719B982A30C6230049FCA1 /* StarcruiserExpandedSemiItalic-gKeY.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "StarcruiserExpandedSemiItalic-gKeY.ttf"; sourceTree = "<group>"; };
 		5872649029E31D4E00B795D7 /* PlanetNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetNode.swift; sourceTree = "<group>"; };
 		587B909F2A27FA8D0096B6D7 /* ExtensionsForApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionsForApp.swift; sourceTree = "<group>"; };
 		588D892129FB33420069BC14 /* FloatingActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingActionButton.swift; sourceTree = "<group>"; };
@@ -124,6 +128,8 @@
 				5808598929D870B800E6F2AD /* Assets.xcassets */,
 				5808598B29D870B800E6F2AD /* LaunchScreen.storyboard */,
 				5808598E29D870B800E6F2AD /* Info.plist */,
+				58719B982A30C6230049FCA1 /* StarcruiserExpandedSemiItalic-gKeY.ttf */,
+				58719B962A2EC95E0049FCA1 /* RussoOne-Regular.ttf */,
 			);
 			path = OrbitV2App;
 			sourceTree = "<group>";
@@ -245,9 +251,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58719B992A30C6230049FCA1 /* StarcruiserExpandedSemiItalic-gKeY.ttf in Resources */,
 				5808598D29D870B800E6F2AD /* LaunchScreen.storyboard in Resources */,
 				5808598A29D870B800E6F2AD /* Assets.xcassets in Resources */,
 				5808598829D870B700E6F2AD /* Main.storyboard in Resources */,
+				58719B972A2EC95E0049FCA1 /* RussoOne-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
