@@ -12,16 +12,17 @@ import UserNotifications
 class LoadingViewController: UIViewController {
     var currentUser: User?
     var loadingProgressView: UIProgressView!
+    let activityIndicator = UIActivityIndicatorView(style: .large)
 
     //When the view initially loads
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.orbitBackground
         loadingProgressView = UIProgressView(progressViewStyle: .default)
         loadingProgressView.translatesAutoresizingMaskIntoConstraints = false
+        loadingProgressView.alpha = 0
         view.addSubview(loadingProgressView)
-        let activityIndicator = UIActivityIndicatorView(style: .large)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.alpha = 0
         view.addSubview(activityIndicator)
         NSLayoutConstraint.activate([
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -38,15 +39,26 @@ class LoadingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // Fade in the activityIndicator and loadingProgressView with a 0.5-second delay
+        UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseInOut) {
+            self.loadingProgressView.alpha = 1
+            self.activityIndicator.alpha = 1
+        }
+        checkNotificationSettings()
+    }
+    
+    
+    
     func updateProgress() {
         loadingProgressView.setProgress(1.0, animated: true)
     }
     
     //When the view appears run this
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        checkNotificationSettings()
-    }
+
 //function to check the user notifications
     func checkNotificationSettings() {
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
@@ -97,12 +109,14 @@ class LoadingViewController: UIViewController {
             self.updateProgress()
 
             // Call setSolarSystem() while the loading bar is running
-            UserManager.shared.setSolarSystem(for: self.currentUser!) { planetOrbitDictionary in
+            UserManager.shared.setSolarSystem(for: self.currentUser!) { planetList in
                 DispatchQueue.main.async {
-                    if !planetOrbitDictionary.isEmpty {
-                        solarSystemVC.user = self.currentUser  // Passing the user
-                        solarSystemVC.planetOrbitDictionary = planetOrbitDictionary // Passing the planetOrbitDictionary
-
+                    if !planetList.isEmpty {
+                        // Passing the user
+                        solarSystemVC.user = self.currentUser
+                        // Passing the planetList
+                        solarSystemVC.planetList = planetList
+                        self.setBackgroundImage(for: solarSystemVC, imageName: "backgroundImage")
                         // Call the original showSolarSystemPage logic after the progress bar finishes loading
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             solarSystemVC.modalPresentationStyle = .fullScreen
@@ -116,6 +130,13 @@ class LoadingViewController: UIViewController {
                 }
             }
         }
+    }
+    func setBackgroundImage(for viewController: UIViewController, imageName: String) {
+        let backgroundImageView = UIImageView(frame: viewController.view.bounds)
+        backgroundImageView.image = UIImage(named: imageName)
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.clipsToBounds = true
+        viewController.view.insertSubview(backgroundImageView, at: 0)
     }
 
     func showUsernameEntryPrompt() {

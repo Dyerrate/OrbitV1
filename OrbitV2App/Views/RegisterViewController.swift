@@ -78,11 +78,9 @@ class RegisterViewController: UIViewController {
             textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
             textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 2, height: textField.frame.height))
             textField.leftViewMode = .always
-            
             textFieldAndIconStackView.addArrangedSubview(imageView)
             textFieldAndIconStackView.addArrangedSubview(textField)
             textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
-            
             fieldStackView.addArrangedSubview(textFieldAndIconStackView)
             stackView.addArrangedSubview(fieldStackView)
         }

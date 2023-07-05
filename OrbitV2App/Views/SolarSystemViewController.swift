@@ -9,37 +9,42 @@ import UIKit
 import SpriteKit
 
 protocol SolarSystemSceneDelegate: AnyObject {
-    func planetSelected(planetName: String, orbitName: String)
+    func planetSelected(planetName: String)
     func planetTapped()
 }
 
 class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, PlanetActionViewDelegate {
+    private var planetManager: PlanetManager?
     private var skView: SKView!
     private var notificationListView: NotificationListView?
     private var planetActionView: PlanetActionView?
     private var selectedPlanetName: String?
+    //Users data attributes
     var user: User?
-    var planetOrbitDictionary: [Planet: Orbit] = [:]
+    var planetList: [Planet: [Notification]] = [:]
+    var notificationLists: [Notification] = []
     private var selectedPlanetOrbit: String?
     
-    func planetSelected(planetName: String, orbitName: String) {
-//        print("these are the sent planets: ", planets!)
-//        guard let planets = planets else { return }
-//
-//        if let planet = planets.first(where: { $0.name == planetName && $0.orbit.name == orbitName }) {
-//            selectedPlanetName = planet.name
-//            selectedPlanetOrbit = planet.orbit.name
-//            planetTapped()
-//        } else {
-//            print("Planet not found")
-//        }
+    func planetSelected(planetName: String) {
+        if let planet = planetList.keys.first(where: { $0.name == planetName }) {
+            selectedPlanetName = planet.name
+            if let notifications = planetList[planet] {
+                notificationLists = notifications
+            } else {
+                notificationLists = []
+                print("No notifications found for the selected planet.")
+            }
+            planetTapped()
+        } else {
+            print("Planet not found")
+        }
     }
 
     func planetTapped() {
         print("planet tapped")
         showPlanetActionView()
         planetActionView?.updatePlanetName(planetName: selectedPlanetName)
-        planetActionView?.updateOrbitName(orbitName: selectedPlanetOrbit)
+        
     }
 
 
@@ -75,16 +80,19 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         planetActionView?.removeFromSuperview()
         planetActionView = nil
         hideNotificationsListView()
-//        planetActionView?.removeSubViews()
     }
     private func presentSolarSystemScene() {
-        let scene = SolarSystemScene(size: skView.bounds.size)
+        let scene = SolarSystemScene(size: skView.bounds.size, backgroundImageName: "backgoundImage")
         scene.solarSystemDelegate = self
         scene.scaleMode = .aspectFill
-        // Pass the user and planetOrbitDictionary to the scene
+        // Pass the user and planetList to the scene
         scene.user = user
-        scene.planetOrbitDictionary = planetOrbitDictionary
+        scene.planetList = planetList
+        scene.size = view.bounds.size
+        skView.bounds = view.bounds
+        skView.backgroundColor = UIColor.clear
         skView.presentScene(scene)
+//        planetManager = PlanetManager(loggedInUser: user!, planetList: planetList)
     }
     
     func viewButtonTapped() {

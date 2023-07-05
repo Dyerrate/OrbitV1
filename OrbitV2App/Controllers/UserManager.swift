@@ -16,6 +16,7 @@ class UserManager {
 
     }
 
+    
     func createUser(user: User, planets: [CKRecord.Reference], completion: @escaping (Result<CKRecord, Error>) -> Void) {
         let container = CKContainer.default()
         let publicDatabase = container.publicCloudDatabase
@@ -88,20 +89,37 @@ class UserManager {
 
             var fetchedRecord: CKRecord?
 
-            operation.recordFetchedBlock = { record in
-                fetchedRecord = record
+            operation.recordMatchedBlock = { (recordID, result) in
+                switch result {
+                case .success(let record):
+                    fetchedRecord = record
+                case .failure(let error):
+                    print(error)
+                    }
             }
-
-            operation.queryCompletionBlock = { cursor, error in
+            operation.queryResultBlock = { result in
                 DispatchQueue.main.async {
-                    if let error = error {
+                    switch result {
+                    case .success(_):
+                        completion(fetchedRecord)
+                        // ...
+                    case .failure(let error):
                         print(error)
                         completion(nil)
-                    } else {
-                        completion(fetchedRecord)
                     }
                 }
             }
+
+//            operation.queryCompletionBlock = { cursor, error in
+//                DispatchQueue.main.async {
+//                    if let error = error {
+//                        print(error)
+//                        completion(nil)
+//                    } else {
+//                        completion(fetchedRecord)
+//                    }
+//                }
+//            }
 
             publicDatabase.add(operation)
         } else {
@@ -161,23 +179,68 @@ class UserManager {
         }
     }
     
-    func setSolarSystem(for user: User, completionHandler: @escaping ([Planet: Orbit]) -> Void) {
-            setPlanets(for: user) { planets in
-                var solarSystem: [Planet: Orbit] = [:]
-                
-                for planet in planets {
-                    self.setOrbit(for: planet) { orbit in
-                        solarSystem[planet] = orbit
-                        
-                        // Check if all planets have been processed
-                        if solarSystem.count == planets.count {
-                            print("Lets see the complete solarSystem: ", solarSystem)
-                            completionHandler(solarSystem)
-                        }
-                    }
+//    func setSolarSystem(for user: User, completionHandler: @escaping ([Planet]) -> Void) {
+//        setPlanets(for: user) { planets in
+//            var solarSystem: [Planet] = []
+//            for planet in planets {
+//                solarSystem.append(planet)
+//                // Check if all planets have been processed
+//                if solarSystem.count == planets.count {
+//                    print("Lets see the complete solarSystem: ", solarSystem)
+//                    completionHandler(solarSystem)
+//                }
+//            }
+//        }
+//    }
+    func getNotifications(for planet: Planet, completionHandler: @escaping (Planet, [Notification]) -> Void) {
+        let notificationReferences = planet.notifications
+        let recordIDs = notificationReferences.map { $0.recordID }
+        
+        let fetchOperation = CKFetchRecordsOperation(recordIDs: recordIDs)
+        fetchOperation.desiredKeys = ["date", "description", "title", "notificationType", "imageName", "priority"]
+        
+        var notifications: [Notification] = []
+        
+        fetchOperation.perRecordCompletionBlock = { record, _, error in
+            if let record = record {
+                let notification = Notification(record: record)
+                notifications.append(notification)
+            } else if let error = error {
+                print("Error fetching notification record: \(error.localizedDescription)")
+            }
+        }
+        
+        fetchOperation.fetchRecordsCompletionBlock = { _, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Error fetching notifications: \(error.localizedDescription)")
+                } else {
+                    completionHandler(planet, notifications)
                 }
             }
         }
+        
+        CKContainer.default().publicCloudDatabase.add(fetchOperation)
+    }
+    func setSolarSystem(for user: User, completionHandler: @escaping ([Planet: [Notification]]) -> Void) {
+        setPlanets(for: user) { planets in
+            var solarSystem: [Planet: [Notification]] = [:]
+            let group = DispatchGroup()
+
+            for planet in planets {
+                group.enter()
+                self.getNotifications(for: planet) { planetWithNotifications, notifications in
+                    solarSystem[planetWithNotifications] = notifications
+                    group.leave()
+                }
+            }
+
+            group.notify(queue: .main) {
+                print("Solar system with notifications: ", solarSystem)
+                completionHandler(solarSystem)
+            }
+        }
+    }
 
     func setPlanets(for user: User, completion: @escaping ([Planet]) -> Void) {
         let container = CKContainer.default()
@@ -190,7 +253,7 @@ class UserManager {
         var fetchedRecords = [CKRecord]()
         print("recordIDs: ", recordIDs)
 
-        fetchOperation.perRecordCompletionBlock = { record, _, error in
+        fetchOperation.perRecordCompletionBlock   = { record, _, error in
             if let error = error {
                 print("Error fetching planet record: \(error.localizedDescription)")
             } else if let record = record {
@@ -205,9 +268,15 @@ class UserManager {
             } else {
                 var planets = [Planet]()
 
+                let sortedRecords = fetchedRecords.sorted { (record1, record2) -> Bool in
+                    let position1 = record1["position"] as? Int ?? 0
+                    let position2 = record2["position"] as? Int ?? 0
+                    return position1 < position2
+                }
+
                 let fetchGroup = DispatchGroup()
 
-                for record in fetchedRecords {
+                for record in sortedRecords {
                     if let planet = Planet(record: record) {
                         DispatchQueue.main.async {
                             print("appended planet: ", planet)
@@ -224,31 +293,7 @@ class UserManager {
 
         database.add(fetchOperation)
     }
-    
-    func setOrbit(for planet: Planet, completionHandler: @escaping (Orbit?) -> Void) {
-        let recordID = planet.orbitReference.recordID
-        let fetchOperation = CKFetchRecordsOperation(recordIDs: [recordID])
 
-        fetchOperation.perRecordCompletionBlock = { record, _, error in
-            if let error = error {
-                print("Error fetching Orbit record: \(error.localizedDescription)")
-                completionHandler(nil)
-            } else if let record = record {
-                let orbit = Orbit(record: record) // Assuming you have an Orbit initializer that takes a CKRecord
-                print("lets see the record: ", record)
-                print("now lets see the orbit", orbit!)
-                completionHandler(orbit)
-            } else {
-                print("The orbit has failed to be set...")
-                completionHandler(nil)
-            }
-        }
-
-        CKContainer.default().publicCloudDatabase.add(fetchOperation)
-    }
- 
-    
-    
     func getUser(by uuid: String, fullName: String?, email: String?, completion: @escaping (Result<User?, Error>) -> Void) {
         let container = CKContainer.default()
         let publicDatabase = container.publicCloudDatabase

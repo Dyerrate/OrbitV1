@@ -4,11 +4,10 @@
 //
 //  Created by Samuel Dyer on 4/20/23.
 //
-import Contacts
 import UIKit
 
 protocol PlanetActionViewDelegate: AnyObject {
-    func planetSelected(planetName: String, orbitName: String)
+    func planetSelected(planetName: String)
     func viewButtonTapped()
     func editButtonTapped()
     func returnButtonTapped()
@@ -26,7 +25,7 @@ class PlanetActionView: UIView, UIScrollViewDelegate, UIPickerViewDataSource, UI
     private let dateTextField = UITextField()
     private let addNotificationButton = UIButton()
     var contactsViewModel: ContactsViewModel?
-    
+
     let goalsCategoryPicker = UIPickerView()
     let categoryPicker = UIPickerView()
     let descriptionTextView = UITextView()
@@ -37,10 +36,8 @@ class PlanetActionView: UIView, UIScrollViewDelegate, UIPickerViewDataSource, UI
 
     
     private let editFieldsContainerView = UIView()
-    
     //Delegate to pass functions to parent view
     weak var delegate: PlanetActionViewDelegate?
-    
     //The new View
     private let planetInfoView = UIView()
     private let activeNotificationsView = UIView()
@@ -61,13 +58,13 @@ class PlanetActionView: UIView, UIScrollViewDelegate, UIPickerViewDataSource, UI
     
     //*----- INSIDE OF PLANET-INFO-VIEW -----*
     
-    private let orbitNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        label.textAlignment = .center
-        label.textColor = .white
-        return label
-    }()
+//    private let orbitNameLabel: UILabel = {
+//        let label = UILabel()
+//        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+//        label.textAlignment = .center
+//        label.textColor = .white
+//        return label
+//    }()
     private let notificationTypeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
@@ -81,14 +78,19 @@ class PlanetActionView: UIView, UIScrollViewDelegate, UIPickerViewDataSource, UI
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
-        label.textColor = .white
+        label.textColor = .black
         return label
     }()
     
     
     private let floatingPanel: UIView = {
         let view = UIView()
-        view.backgroundColor = .spacePurple1
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.objectPrimary
+        view.layer.shadowOpacity = 0.3
+        view.layer.shadowRadius = 5
+        view.layer.shadowOffset = CGSize(width: 0, height: 2)
+        view.layer.shadowColor = UIColor.darkGray.cgColor
         view.layer.cornerRadius = 20
         return view
     }()
@@ -119,6 +121,7 @@ class PlanetActionView: UIView, UIScrollViewDelegate, UIPickerViewDataSource, UI
             scrollView.topAnchor.constraint(equalTo: floatingPanel.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: floatingPanel.bottomAnchor)
         ])
+        
         setupPageControl()
         setupPlanetInfoView()
         setupActiveNotificationsView()
@@ -128,8 +131,8 @@ class PlanetActionView: UIView, UIScrollViewDelegate, UIPickerViewDataSource, UI
         for (index, panelView) in panelViews.enumerated() {
             scrollView.addSubview(panelView)
             panelView.translatesAutoresizingMaskIntoConstraints = false
-
             var leadingAnchor: NSLayoutXAxisAnchor
+            
             if index == 0 {
                 leadingAnchor = scrollView.leadingAnchor
             } else {
@@ -158,29 +161,26 @@ class PlanetActionView: UIView, UIScrollViewDelegate, UIPickerViewDataSource, UI
     private func setupPlanetInfoView() {
         planetInfoView.backgroundColor = .clear
         planetInfoView.translatesAutoresizingMaskIntoConstraints = false
-        
         planetNameLabel.font = UIFont.systemFont(ofSize: 28, weight: .bold)
         planetNameLabel.textColor = .white
         planetNameLabel.translatesAutoresizingMaskIntoConstraints = false
         planetInfoView.addSubview(planetNameLabel)
-        
         NSLayoutConstraint.activate([
             planetNameLabel.centerXAnchor.constraint(equalTo: planetInfoView.centerXAnchor),
             planetNameLabel.topAnchor.constraint(equalTo: planetInfoView.topAnchor, constant: 10)
         ])
-        planetInfoView.addSubview(orbitNameLabel)
-        orbitNameLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            orbitNameLabel.centerXAnchor.constraint(equalTo: planetInfoView.centerXAnchor),
-            orbitNameLabel.topAnchor.constraint(equalTo: planetNameLabel.bottomAnchor, constant: 8)
-        ])
+//        planetInfoView.addSubview(orbitNameLabel)
+//        orbitNameLabel.translatesAutoresizingMaskIntoConstraints = false
+//
+//        NSLayoutConstraint.activate([
+//            orbitNameLabel.centerXAnchor.constraint(equalTo: planetInfoView.centerXAnchor),
+//            orbitNameLabel.topAnchor.constraint(equalTo: planetNameLabel.bottomAnchor, constant: 8)
+//        ])
     }
 
     private func setupActiveNotificationsView() {
         activeNotificationsView.backgroundColor = UIColor.clear
         activeNotificationsView.layer.cornerRadius = 20
-
         // Add active notifications UI elements here
     }
 
@@ -364,32 +364,30 @@ class PlanetActionView: UIView, UIScrollViewDelegate, UIPickerViewDataSource, UI
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let viewWidth = scrollView.bounds.width
         let currentPage = Int(round(scrollView.contentOffset.x / viewWidth))
-        let backgroundColors = [UIColor.spacePurple1, UIColor.green, UIColor.blue]
 
-        floatingPanel.backgroundColor = backgroundColors[currentPage]
         pageControl.currentPage = currentPage
 
         switch currentPage {
         case 0: // planetInfoView
             planetNameLabel.isHidden = false
-            orbitNameLabel.isHidden = false
+//            orbitNameLabel.isHidden = false
             editFieldsContainerView.isHidden = true
         case 2: // editNotificationsView
             planetNameLabel.isHidden = true
-            orbitNameLabel.isHidden = true
+//            orbitNameLabel.isHidden = true
             editFieldsContainerView.isHidden = false
         default: // other views
             planetNameLabel.isHidden = true
-            orbitNameLabel.isHidden = true
+//            orbitNameLabel.isHidden = true
             editFieldsContainerView.isHidden = true
         }
     }
-    func updateOrbitName(orbitName: String?) {
-        if let name = orbitName {
-            orbitNameLabel.text = "Orbit: \(name)"
-        }
-    }
-    
+//    func updateOrbitName(orbitName: String?) {
+//        if let name = orbitName {
+////            orbitNameLabel.text = "Orbit: \(name)"
+//        }
+//    }
+//
     override func layoutSubviews() {
         super.layoutSubviews()
         planetNameLabel.center = CGPoint(x: planetInfoView.bounds.width / 2, y: planetInfoView.bounds.height / 2)
@@ -488,11 +486,9 @@ class PlanetActionView: UIView, UIScrollViewDelegate, UIPickerViewDataSource, UI
     override init(frame: CGRect) {
         panelViews = [planetInfoView, activeNotificationsView, editNotificationsView]
         super.init(frame: frame)
-        backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        backgroundColor = UIColor.clear
         setupFloatingPanel()
-//      setupSwipeGestureRecognizers()
     }
-    
     //honestly not certain why this is always required yet lol
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

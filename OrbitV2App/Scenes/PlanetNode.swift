@@ -25,13 +25,15 @@ class PlanetNode: SKSpriteNode {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let parentScene = scene as? SolarSystemScene {
+        if let parentScene = scene as? SolarSystemScene, let touch = touches.first {
+            let locationInScene = touch.location(in: parentScene)
             print("tapped planet in node")
+            print("tapped location: \(locationInScene)")
             handleTap(with: parentScene.cameraNode, in: parentScene)
-            
-            // Pass the `name` property of the `planet` property directly
-//            parentScene.solarSystemDelegate?.planetSelected(planetName: planet.name, orbitName: planet.orbit.name)
-
+        }
+        super.touchesBegan(touches, with: event)
+        if let scene = self.scene as? SolarSystemScene {
+            scene.handlePlanetTapped(planetName: self.planet.name)
         }
     }
     
@@ -40,21 +42,17 @@ class PlanetNode: SKSpriteNode {
         if !isZoomed {
             let scaleCamera = SKAction.scale(to: 0.5, duration: 0.9)
             cameraNode.run(scaleCamera)
-
-            let followPlanet = SKAction.customAction(withDuration: 0.5) { _, elapsedTime in
-                cameraNode.position = CGPoint(x: self.position.x, y: self.position.y - scene.size.height * 1/6)
-            }
-            cameraNode.run(followPlanet)
             scene.selectedPlanetNode = self
+            scene.shouldFollowPlanet = true
         } else {
-            let moveCamera = SKAction.move(to: CGPoint.zero, duration: 1)
-            let scaleCamera = SKAction.scale(to: 1.0, duration: 1)
+            let moveCamera = SKAction.move(to: CGPoint(x: scene.size.width / 2, y: scene.size.height / 2), duration: 1)
+            let scaleCamera = SKAction.scale(to: scene.size.width / scene.size.height, duration: 1)
             let group = SKAction.group([moveCamera, scaleCamera])
             cameraNode.run(group)
-            
             scene.selectedPlanetNode = nil
+            scene.shouldFollowPlanet = false
         }
-        
+        scene.toggleHUDLabelsVisibility()
         isZoomed.toggle()
     }
 }
