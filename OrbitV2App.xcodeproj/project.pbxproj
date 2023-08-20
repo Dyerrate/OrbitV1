@@ -27,7 +27,6 @@
 		582155C72A16B12B007D1150 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 582155C62A16B12B007D1150 /* FirebaseAuth */; };
 		582155C92A16EE33007D1150 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582155C82A16EE33007D1150 /* AuthenticationService.swift */; };
 		583756742A45118A005DD5BE /* PlanetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583756732A45118A005DD5BE /* PlanetManager.swift */; };
-		583756762A53535A005DD5BE /* SignInHelpPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583756752A53535A005DD5BE /* SignInHelpPanel.swift */; };
 		58583B672A0AFA0F003436CB /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58583B662A0AFA0F003436CB /* ContactsViewModel.swift */; };
 		586D878029DE1B780069E68B /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D877F29DE1B780069E68B /* LoadingViewController.swift */; };
 		586D878229DE20380069E68B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878129DE20380069E68B /* User.swift */; };
@@ -69,7 +68,6 @@
 		582155C42A1444ED007D1150 /* OrbitV2App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OrbitV2App.entitlements; sourceTree = "<group>"; };
 		582155C82A16EE33007D1150 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		583756732A45118A005DD5BE /* PlanetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetManager.swift; sourceTree = "<group>"; };
-		583756752A53535A005DD5BE /* SignInHelpPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInHelpPanel.swift; sourceTree = "<group>"; };
 		58583B662A0AFA0F003436CB /* ContactsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewModel.swift; sourceTree = "<group>"; };
 		586D877F29DE1B780069E68B /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		586D878129DE20380069E68B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -165,7 +163,6 @@
 				580859A229D877E500E6F2AD /* PlanetView.swift */,
 				58AF7A1E29EC6F0E00828132 /* NotificationListView.swift */,
 				58C5953D29F203DA00AB49AA /* PlanetActionView.swift */,
-				583756752A53535A005DD5BE /* SignInHelpPanel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -282,7 +279,6 @@
 				58C5953E29F203DA00AB49AA /* PlanetActionView.swift in Sources */,
 				58CD30762A09A7890060C651 /* BubbleButton.swift in Sources */,
 				586D878029DE1B780069E68B /* LoadingViewController.swift in Sources */,
-				583756762A53535A005DD5BE /* SignInHelpPanel.swift in Sources */,
 				5808599829D8713F00E6F2AD /* Ring.swift in Sources */,
 				588D89242A01E0C60069BC14 /* Orbit.swift in Sources */,
 				588D89262A02C4720069BC14 /* PlanetActionViewController.swift in Sources */,

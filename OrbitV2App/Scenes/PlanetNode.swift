@@ -33,7 +33,7 @@ class PlanetNode: SKSpriteNode {
         }
         super.touchesBegan(touches, with: event)
         if let scene = self.scene as? SolarSystemScene {
-            scene.handlePlanetTapped(planetName: self.planet.name)
+            scene.handlePlanetTapped(planetInfo: self.planet)
         }
     }
     

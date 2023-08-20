@@ -11,7 +11,6 @@ import CloudKit
 class UserManager {
     static let shared = UserManager()
     var users: [User] = []
-
     init() {
 
     }
@@ -109,18 +108,6 @@ class UserManager {
                     }
                 }
             }
-
-//            operation.queryCompletionBlock = { cursor, error in
-//                DispatchQueue.main.async {
-//                    if let error = error {
-//                        print(error)
-//                        completion(nil)
-//                    } else {
-//                        completion(fetchedRecord)
-//                    }
-//                }
-//            }
-
             publicDatabase.add(operation)
         } else {
             DispatchQueue.main.async {
@@ -178,29 +165,14 @@ class UserManager {
             }
         }
     }
-    
-//    func setSolarSystem(for user: User, completionHandler: @escaping ([Planet]) -> Void) {
-//        setPlanets(for: user) { planets in
-//            var solarSystem: [Planet] = []
-//            for planet in planets {
-//                solarSystem.append(planet)
-//                // Check if all planets have been processed
-//                if solarSystem.count == planets.count {
-//                    print("Lets see the complete solarSystem: ", solarSystem)
-//                    completionHandler(solarSystem)
-//                }
-//            }
-//        }
-//    }
+
     func getNotifications(for planet: Planet, completionHandler: @escaping (Planet, [Notification]) -> Void) {
         let notificationReferences = planet.notifications
         let recordIDs = notificationReferences.map { $0.recordID }
         
         let fetchOperation = CKFetchRecordsOperation(recordIDs: recordIDs)
         fetchOperation.desiredKeys = ["date", "description", "title", "notificationType", "imageName", "priority"]
-        
         var notifications: [Notification] = []
-        
         fetchOperation.perRecordCompletionBlock = { record, _, error in
             if let record = record {
                 let notification = Notification(record: record)
@@ -279,7 +251,7 @@ class UserManager {
                 for record in sortedRecords {
                     if let planet = Planet(record: record) {
                         DispatchQueue.main.async {
-                            print("appended planet: ", planet)
+                            print("appended planet notification: ", planet.notifications)
                             planets.append(planet)
                         }
                     }
@@ -292,6 +264,150 @@ class UserManager {
         }
 
         database.add(fetchOperation)
+    }
+    
+    func removePlanetNotificationList(user: User, planet: Planet, notifications: [Notification], completion: @escaping (Result<Void, Error>) -> Void) {
+        let container = CKContainer.default()
+        let publicDatabase = container.publicCloudDatabase
+        let planetReferences = user.planets
+        let recordIDs = planetReferences.map { $0.recordID }
+        let fetchOperation = CKFetchRecordsOperation(recordIDs: recordIDs)
+        print("We are deleting a record here")
+        // Step 1: Fetch planet records and remove the specified notifications
+        fetchOperation.perRecordCompletionBlock = { record, recordID, error in
+            if let error = error {
+                print("Error fetching planet record: \(error.localizedDescription)")
+            } else if let record = record, record["name"] as? String == planet.name {
+                var existingNotificationReferences = record["notifications"] as? [CKRecord.Reference] ?? []
+                existingNotificationReferences = existingNotificationReferences.filter { reference in
+                    !notifications.contains(where: { $0.recordID == reference.recordID })
+                }
+                record["notifications"] = existingNotificationReferences as CKRecordValue
+                publicDatabase.save(record) { (record, error) in
+                    if let error = error {
+                        print("Error saving planet record: \(error.localizedDescription)")
+                    } else {
+                        print("Successfully saved planet record with removed notifications.")
+                    }
+                }
+            }
+        }
+
+        fetchOperation.fetchRecordsCompletionBlock = { records, error in
+            if let error = error {
+                print("Error fetching records: \(error.localizedDescription)")
+            } else if let records = records {
+                print("Fetched records: ", records)
+            }
+        }
+        publicDatabase.add(fetchOperation)
+    }
+    
+    func updateNotificationPriority(notifications: [Notification], completion: @escaping (Result<Void, Error>) -> Void) {
+        let container = CKContainer.default()
+        let publicDatabase = container.publicCloudDatabase
+        let dispatchGroup = DispatchGroup()
+        
+        for notification in notifications {
+            dispatchGroup.enter()
+            print("this is what we are passing in to the record reader for priority: ", [notification.recordID!])
+            let fetchOperation = CKFetchRecordsOperation(recordIDs: [notification.recordID!])
+            // Fetch the notification record
+            fetchOperation.perRecordCompletionBlock = { record, _, error in
+                if let error = error {
+                    print("Error fetching notification record: \(error.localizedDescription)")
+                } else if let record = record {
+                    // Update the 'priority' field of the record
+                    record["priority"] = notification.priority
+                    // Save the updated record back to the database
+                    publicDatabase.save(record) { (savedRecord, saveError) in
+                        if let saveError = saveError {
+                            print("Error saving notification record: \(saveError.localizedDescription)")
+                        } else {
+                            print("Successfully updated notification record priority.")
+                        }
+                        dispatchGroup.leave()
+                    }
+                }
+            }
+            publicDatabase.add(fetchOperation)
+        }
+        dispatchGroup.notify(queue: .main) {
+            print("Successfully updated all notification priorities.")
+            completion(.success(()))
+        }
+    }
+
+
+    
+    func addPlanetNotificationList(user: User, planet: Planet, notifications: [Notification], completion: @escaping (Result<Void, Error>) -> Void) {
+        let container = CKContainer.default()
+        let publicDatabase = container.publicCloudDatabase
+        var notificationRecords = [CKRecord]()
+        let planetReferences = user.planets
+        let recordIDs = planetReferences.map { $0.recordID }
+        let fetchOperation = CKFetchRecordsOperation(recordIDs: recordIDs)
+        var fetchedRecords = [CKRecord]()
+        print("recordIDs from UPDATE: ", recordIDs)
+
+        // Step 1: Convert Notification objects to CKRecord objects and save them to the database
+        let dispatchGroup = DispatchGroup()
+        for notification in notifications {
+            let notificationRecord = createNotificationRecord(notification: notification)
+            notificationRecords.append(notificationRecord)
+            // Save the record to the database
+            dispatchGroup.enter()
+            publicDatabase.save(notificationRecord) { (record, error) in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        print("Error saving notification record: \(error.localizedDescription)")
+                    } else {
+                        print("Successfully saved notification record.")
+                    }
+                    dispatchGroup.leave()
+                }
+            }
+        }
+        // Wait for all saving operations to finish before proceeding
+        dispatchGroup.notify(queue: .main) {
+            fetchOperation.perRecordCompletionBlock = { record, _, error in
+                if let error = error {
+                    print("Error fetching planet record: \(error.localizedDescription)")
+                } else if let record = record, record["name"] as? String == planet.name {
+                    fetchedRecords.append(record)
+                    let existingNotificationReferences = record["notifications"] as? [CKRecord.Reference] ?? []
+                    let newNotificationReferences = notificationRecords.map { CKRecord.Reference(record: $0, action: .none) }
+                    let updatedNotificationReferences = existingNotificationReferences + newNotificationReferences
+                    record["notifications"] = updatedNotificationReferences as CKRecordValue
+                    publicDatabase.save(record) { (savedRecord, saveError) in
+                        if let saveError = saveError {
+                            print("Error saving planet record: \(saveError.localizedDescription)")
+                        } else {
+                            print("Successfully saved planet record with new notifications.")
+                        }
+                    }
+                }
+            }
+            fetchOperation.fetchRecordsCompletionBlock = { records, error in
+                if let error = error {
+                    print("Error fetching records: \(error.localizedDescription)")
+                } else {
+                    print("Fetched records: ", records!)
+                }
+            }
+            publicDatabase.add(fetchOperation)
+        }
+    }
+
+    func createNotificationRecord(notification: Notification) -> CKRecord {
+        let recordID = CKRecord.ID(recordName: UUID().uuidString)
+        let notificationRecord = CKRecord(recordType: "Notification", recordID: recordID)
+        notificationRecord["notificationType"] = notification.type
+        notificationRecord["description"] = notification.description
+        notificationRecord["priority"] = notification.priority
+        notificationRecord["title"] = notification.title
+        print("UPDATE: new notification record: ", notificationRecord)
+        return notificationRecord
     }
 
     func getUser(by uuid: String, fullName: String?, email: String?, completion: @escaping (Result<User?, Error>) -> Void) {

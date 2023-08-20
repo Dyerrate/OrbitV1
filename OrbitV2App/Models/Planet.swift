@@ -19,7 +19,7 @@ class Planet: Hashable {
         self.name = name
         self.image = imageName
         self.position = position
-        self.notifications = []
+        self.notifications = notifications
     }
     
     convenience init?(record: CKRecord) {

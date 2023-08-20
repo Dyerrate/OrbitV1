@@ -103,11 +103,9 @@ class LoadingViewController: UIViewController {
     // Present the solar system view controller here
     func showSolarSystemPage() {
         let solarSystemVC = SolarSystemViewController()
-
         // Start the progress bar loading
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             self.updateProgress()
-
             // Call setSolarSystem() while the loading bar is running
             UserManager.shared.setSolarSystem(for: self.currentUser!) { planetList in
                 DispatchQueue.main.async {

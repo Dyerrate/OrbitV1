@@ -133,11 +133,11 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate, 
         orbitLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(orbitLabel)
         //NOTE: Remove comments to print fonts
-        for family in UIFont.familyNames {
-            for name in UIFont.fontNames(forFamilyName: family) {
-                print(name)
-            }
-        }
+//        for family in UIFont.familyNames {
+//            for name in UIFont.fontNames(forFamilyName: family) {
+//                print(name)
+//            }
+//        }
         NSLayoutConstraint.activate([
             orbitLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             orbitLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -view.frame.height / 3.5),

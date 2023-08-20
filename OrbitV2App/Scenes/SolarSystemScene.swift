@@ -49,11 +49,11 @@ class SolarSystemScene: SKScene {
         addChild(cameraNode)
 
         // Variables to store the current orbit size and increment amount
-        var currentOrbitSize: CGFloat = initialOrbitSize
-        let orbitSizeIncrement: CGFloat = 1.75
+        var currentOrbitSize: CGFloat = initialOrbitSize * 1.85
+        let orbitSizeIncrement: CGFloat = 1.45
 
         for (planet, _) in planetList {
-            let orbitNode = OrbitNode(orbitSize: currentOrbitSize, center: frameCenter, strokeColor: .white)
+            let orbitNode = OrbitNode(orbitSize: currentOrbitSize, center: frameCenter, strokeColor: .gray)
             orbitNode.zRotation = inclinationAngle
             orbitNode.position = frameCenter
             //TODO: Fix the orbit label
@@ -62,8 +62,8 @@ class SolarSystemScene: SKScene {
             let initialPosition = pointOnPath(path: orbitNode.getOrbitPath(), atPercentOfLength: 2.0, angle: orbitNode.orbitRotation)
             planetNode.position = initialPosition
             planetNode.zRotation = inclinationAngle
-            planetNode.xScale = 0.009
-            planetNode.yScale = 0.009
+            planetNode.xScale = 0.011
+            planetNode.yScale = 0.011
             orbitNode.addChild(planetNode)
             planetNode.zPosition = 1
             self.addChild(orbitNode)
@@ -103,7 +103,6 @@ class SolarSystemScene: SKScene {
     
     func setOrbitInfo(planetPosition: Int) -> String {
         switch planetPosition {
-            
         case 1: return "1 - 5 Days"
         case 2: return "1 - 2 Weeks"
         case 3: return "1 Month"
@@ -112,10 +111,9 @@ class SolarSystemScene: SKScene {
         }
     }
     
-    func handlePlanetTapped(planetName: String) {
-        solarSystemDelegate?.planetSelected(planetName: planetName)
+    func handlePlanetTapped(planetInfo: Planet) {
+        solarSystemDelegate?.planetSelected(planetInfo: planetInfo)
     }
-    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
@@ -211,7 +209,8 @@ class SolarSystemScene: SKScene {
         
         if gestureRecognizer.state == .changed {
             let newScale = initialCameraScale / gestureRecognizer.scale
-            cameraNode.setScale(newScale)
+            let clampedScale = max(0.5, min(newScale, 2.0))  // Clamp the scale between 0.5 and 2.0
+            cameraNode.setScale(clampedScale)
         }
     }
     
@@ -278,16 +277,16 @@ class SolarSystemScene: SKScene {
         let starfieldNode = SKNode()
         starfieldNode.name = "starfieldNode"
         starfieldNode.zPosition = -1
-        starfieldNode.addChild(starfieldEmitterNode(speed: -12, lifetime: size.height / 23, scale: 0.20, birthRate: 0.1, color: SKColor.lightGray, cameraNode: cameraNode))
+        starfieldNode.addChild(starfieldEmitterNode(speed: -12, lifetime: size.height / 18, scale: 0.20, birthRate: 0.1, color: SKColor.lightGray, cameraNode: cameraNode))
         addChild(starfieldNode)
 
         // A second layer of stars
-        let emitterNode2 = starfieldEmitterNode(speed: -8, lifetime: size.height / 10, scale: 0.12, birthRate: 0.25, color: SKColor.gray, cameraNode: cameraNode)
+        let emitterNode2 = starfieldEmitterNode(speed: -8, lifetime: size.height / 14, scale: 0.12, birthRate: 0.25, color: SKColor.gray, cameraNode: cameraNode)
         emitterNode2.zPosition = -10
         starfieldNode.addChild(emitterNode2)
 
         // A third layer
-        let emitterNode3 = starfieldEmitterNode(speed: -1, lifetime: size.height / 5, scale: 0.05, birthRate: 1, color: SKColor.darkGray, cameraNode: cameraNode)
+        let emitterNode3 = starfieldEmitterNode(speed: -1, lifetime: size.height / 12, scale: 0.05, birthRate: 1, color: SKColor.darkGray, cameraNode: cameraNode)
         starfieldNode.addChild(emitterNode3)
     }
     

@@ -9,50 +9,175 @@ import UIKit
 import SpriteKit
 
 protocol SolarSystemSceneDelegate: AnyObject {
-    func planetSelected(planetName: String)
+    func planetSelected(planetInfo: Planet)
     func planetTapped()
 }
 
 class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, PlanetActionViewDelegate {
+    private var initialNotifications: [Notification]?
+    let userManager = UserManager()
     private var planetManager: PlanetManager?
     private var skView: SKView!
     private var notificationListView: NotificationListView?
     private var planetActionView: PlanetActionView?
     private var selectedPlanetName: String?
+    var navBar: UINavigationBar?
     //Users data attributes
     var user: User?
     var planetList: [Planet: [Notification]] = [:]
     var notificationLists: [Notification] = []
+    var currentPlanet: Planet?
     private var selectedPlanetOrbit: String?
+    var notificationCount: String?
     
-    func planetSelected(planetName: String) {
-        if let planet = planetList.keys.first(where: { $0.name == planetName }) {
-            selectedPlanetName = planet.name
-            if let notifications = planetList[planet] {
-                notificationLists = notifications
+    func planetSelected(planetInfo: Planet) {
+        selectedPlanetName = planetInfo.name
+        currentPlanet = planetInfo
+        updateNotificationsList(for: planetInfo)
+        planetTapped()
+    }
+    func updateNavBar(isThere: Int) {
+        // Remove the old navigation bar if it exists
+        self.navBar?.removeFromSuperview()
+        self.navBar = nil
+        if(isThere > 0) {
+            // Create a new navigation bar
+            let statusBarHeight: CGFloat
+            if #available(iOS 13.0, *) {
+                statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
             } else {
-                notificationLists = []
-                print("No notifications found for the selected planet.")
+                statusBarHeight = UIApplication.shared.statusBarFrame.height
             }
-            planetTapped()
-        } else {
-            print("Planet not found")
+            self.navBar = UINavigationBar(frame: CGRect(x: 0, y: statusBarHeight, width: view.bounds.width, height: 44))
+            self.navBar?.backgroundColor = .clear
+            self.navBar?.isTranslucent = true
+            self.navBar?.setBackgroundImage(UIImage(), for: .default)
+            self.navBar?.shadowImage = UIImage()
+            self.navBar?.translatesAutoresizingMaskIntoConstraints = false
         }
+        // Add the new navigation bar to the view
+        if let navBar = self.navBar {
+            navBar.isHidden = false
+            planetActionView?.activeNotificationsView.addSubview(navBar)
+            
+            // Set constraints for navBar to make it appear above planetActionView.tableView
+            if let planetActionView = self.planetActionView {
+                NSLayoutConstraint.activate([
+                    navBar.bottomAnchor.constraint(equalTo: planetActionView.tableView.topAnchor),
+                    navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                    navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                    navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+                ])
+            }
+        } else {
+            self.navBar?.isHidden = true
+        }
+        // Create a UINavigationItem with the Edit button
+        let navigationItem = UINavigationItem(title: "")
+        navigationItem.rightBarButtonItem = self.editButtonItem
+        // Set the navigation bar's items
+        self.navBar?.setItems([navigationItem], animated: false)
+        // Set the navigation bar's items
+        self.navBar?.setItems([navigationItem], animated: false)
+    }
+    //INFO: For adding a contact
+    func planetActionViewAlertAddContact() {
+        let alert = UIAlertController(title: "Error", message: "A notification for this contact already exists.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func updateNotificationListDB(updateNotifications: [Notification], planetInfo: Planet, option: String) {
+        var newNotifications = [Notification]()
+        for updateNotification in updateNotifications {
+            if !notificationLists.contains(where: {$0.title == updateNotification.title}) {
+                newNotifications.append(updateNotification)
+            }
+        }
+        print("before the userManager")
+        switch option {
+        case "Add":
+            if let existingNotifications = self.planetList[planetInfo] {
+                self.planetList[planetInfo] = existingNotifications + newNotifications
+            } else {
+                self.planetList[planetInfo] = newNotifications
+            }
+            self.updateNotificationsList(for: planetInfo)
+            // Then, update the database in the background
+            userManager.addPlanetNotificationList(user: user!, planet: planetInfo, notifications: newNotifications) { result in
+                print("during the userManager")
+                switch result {
+                case .success():
+                    print("Successfully updated notification list.")
+                case .failure(let error):
+                    print("Failed to update notification list: \\(error)")
+                }
+            }
+        case "Delete":
+            if var existingNotifications = self.planetList[planetInfo] {
+                existingNotifications.removeAll(where: { (notification) -> Bool in
+                    updateNotifications.contains(where: { $0.title == notification.title })
+                })
+                self.planetList[planetInfo] = existingNotifications
+                self.updateNotificationsList(for: planetInfo)
+                // Then, update the database in the background
+                userManager.removePlanetNotificationList(user: user!, planet: planetInfo, notifications: updateNotifications) { result in
+                    print("during the userManager deletion: sent:", newNotifications)
+                    switch result {
+                    case .success():
+                        print("Successfully removed/updated notification list.")
+                    case .failure(let error):
+                        print("Failed to update notification list: \\(error)")
+                    }
+                }
+            } else {
+                print("No notifications to delete.")
+            }
+        default:
+            print("it didn't work")
+        }
+        
+    }
+    
+    func updateNotificationsList(for planet: Planet) {
+        notificationLists = planetList[planet] ?? []
+        notificationLists.sort { $0.priority < $1.priority }
+        notificationCount = String(notificationLists.count)
+        planetActionView?.updateNotificationPriorities()
+        print("We have updated the notification list yay")
     }
 
     func planetTapped() {
-        print("planet tapped")
         showPlanetActionView()
         planetActionView?.updatePlanetName(planetName: selectedPlanetName)
-        
+        let updatedNotificationList = planetList[currentPlanet!] ?? []
+        planetActionView?.updateTappedPlanetInfo(planet: currentPlanet!, notificationList: updatedNotificationList)
+        print("planet tapped")
     }
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         setupSKView()
         presentSolarSystemScene()
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
+    }
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
     }
 
     private func setupSKView() {
@@ -60,18 +185,68 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         skView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(skView)
     }
-    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        planetActionView?.tableView.setEditing(editing, animated: animated)
+    }
+    //INFO: Displaying the planet panel
     private func showPlanetActionView() {
         if planetActionView == nil {
-            planetActionView = PlanetActionView(frame: CGRect(x: 0, y: view.bounds.height, width: view.bounds.width, height: view.bounds.height * 2/3))
+            planetActionView?.changedNotifications = []
+            planetActionView?.priorityChange = false
+            planetActionView = PlanetActionView(frame: CGRect(x: 0, y: view.bounds.height, width: view.bounds.width, height: view.bounds.height * 2/3), notifications: notificationLists)
             planetActionView?.delegate = self
             view.addSubview(planetActionView!)
         } else {
+            if planetActionView?.changedNotifications != nil {
+                print("We are trying to change DB")
+                var addNotification: [Notification] = []
+                var deleteNotification: [Notification] = []
+                for update in planetActionView!.changedNotifications {
+                    let action = update.action
+                    let notification = update.notification
+                    switch action {
+                        case "add":
+                        addNotification.append(update.notification)
+                        print("We add a notification to send: add")
+                              // Logic to add the notification
+                        case "delete":
+                        deleteNotification.append(update.notification)
+                        print("We add a notification to send: delete")
+                              // Logic to delete the notification
+                        default:
+                            continue
+                        }
+                    }
+                if !addNotification.isEmpty {
+                    updateNotificationListDB(updateNotifications: addNotification, planetInfo: currentPlanet!, option: "Add")
+                }
+                if !deleteNotification.isEmpty {
+                    updateNotificationListDB(updateNotifications: deleteNotification, planetInfo: currentPlanet!, option: "Delete")
+                }
+            }
+            if(planetActionView?.priorityChange == true) {
+                checkForPriorityUpdate()
+            }
             clearPlanetActionView()
         }
-
         UIView.animate(withDuration: 0.3) {
             self.planetActionView?.frame.origin.y = self.view.bounds.height * 1/3
+        }
+    }
+    
+    private func checkForPriorityUpdate() {
+        let currentNotifications: [Notification] = planetActionView!.notifications
+        if !currentNotifications.isEmpty {
+            userManager.updateNotificationPriority(notifications: currentNotifications){ result in
+                switch result {
+                case .success():
+                    print("we did it for priority")
+                    
+                case . failure(let error):
+                    print("fialed to do this priority que: ", error)
+                }
+            }
         }
     }
     
@@ -79,8 +254,9 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
     private func clearPlanetActionView() {
         planetActionView?.removeFromSuperview()
         planetActionView = nil
-        hideNotificationsListView()
     }
+    
+    
     private func presentSolarSystemScene() {
         let scene = SolarSystemScene(size: skView.bounds.size, backgroundImageName: "backgoundImage")
         scene.solarSystemDelegate = self
@@ -92,36 +268,11 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         skView.bounds = view.bounds
         skView.backgroundColor = UIColor.clear
         skView.presentScene(scene)
-//        planetManager = PlanetManager(loggedInUser: user!, planetList: planetList)
-    }
-    
-    func viewButtonTapped() {
-          showNotifications()
-      }
-    
-    func editButtonTapped() {
-    
-    }
-    func returnButtonTapped() {
-//        planetActionView?.resetToInitialState()
-        hideNotificationsListView()
-    }
-    func hideNotificationsListView() {
-        notificationListView?.removeFromSuperview()
-        notificationListView = nil
-        print("showNotifications DELETE")
-    }
-    func showNotifications() {
-        if notificationListView == nil {
-            print("showNotifications APPEAR")
-            notificationListView = NotificationListView(frame: CGRect(x: 0, y: view.bounds.height, width: view.bounds.width, height: view.bounds.height * 0.35), loggedIn: user != nil)
-            view.addSubview(notificationListView!)
-        }
-        UIView.animate(withDuration: 0.3) {
-            self.notificationListView?.frame.origin.y = self.view.bounds.height / 1.2
-        }
     }
 
-    
 }
-
+extension Notification: Equatable {
+    static func == (lhs: Notification, rhs: Notification) -> Bool {
+        return lhs.title == rhs.title && lhs.type == rhs.type
+    }
+}

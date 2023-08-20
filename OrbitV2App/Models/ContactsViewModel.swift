@@ -9,10 +9,17 @@ import Foundation
 import UIKit
 import Contacts
 
+protocol ContactsViewModelDelegate: AnyObject {
+    func didTapAddButtonForContactWithName(_ fullName: String)
+    func didTapRemoveButtonForContactWithName(_ fullName: String)
+}
+
 class ContactsViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
     var contacts: [CNContact] = []
     var selectedContacts: [CNContact] = []
     weak var contactsTableView: UITableView?
+    weak var delegate: ContactsViewModelDelegate?
+
 
     init(tableView: UITableView) {
         self.contactsTableView = tableView
@@ -66,9 +73,13 @@ class ContactsViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
         // Configure the cell with contact data
         cell.nameLabel.text = contact.givenName + " " + contact.familyName
         if let imageData = contact.imageData {
-            cell.contactImageView.image = UIImage(data: imageData)
-        }
-
+             let image = UIImage(data: imageData)
+             let squareImage = self.squareImage(image: image!, size: CGSize(width: 40, height: 40))
+             let circularImage = self.circularImage(image: squareImage)
+             cell.contactImageView.image = circularImage
+         } else {
+             cell.contactImageView.image = UIImage(systemName: "person.circle")
+         }
         // Configure the add/remove button
         if selectedContacts.contains(where: { $0.identifier == contact.identifier }) {
             cell.addButton.setImage(UIImage(systemName: "minus.circle"), for: .normal)
@@ -77,20 +88,75 @@ class ContactsViewModel: NSObject, UITableViewDataSource, UITableViewDelegate {
         }
 
         cell.addButtonAction = { [weak self] in
+            let fullName = "\(contact.givenName) \(contact.familyName)"
             if let index = self?.selectedContacts.firstIndex(where: { $0.identifier == contact.identifier }) {
                 // Remove the contact from selectedContacts if it's already added
                 self?.selectedContacts.remove(at: index)
+                self?.delegate?.didTapRemoveButtonForContactWithName(fullName)
             } else {
                 // Add the contact to selectedContacts if it's not already added
                 self?.selectedContacts.append(contact)
+                self?.delegate?.didTapAddButtonForContactWithName(fullName)
             }
-
             // Refresh the table view to update the add/remove button
             tableView.reloadData()
         }
-
         return cell
     }
+    
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+
+        // Figure out what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
+        }
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+
+        // Actually do the resizing to the rect using the ImageContext stuff
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage!
+    }
+    
+    func squareImage(image: UIImage, size: CGSize) -> UIImage {
+        let newSize: CGSize
+        if image.size.width < image.size.height {
+            newSize = CGSize(width: image.size.width, height: image.size.width)
+        } else {
+            newSize = CGSize(width: image.size.height, height: image.size.height)
+        }
+
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage!
+    }
+    
+    func circularImage(image: UIImage) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        let clipPath = UIBezierPath(roundedRect: CGRect(origin: .zero, size: image.size), cornerRadius: image.size.width/2)
+        clipPath.addClip()
+        image.draw(in: CGRect(origin: .zero, size: image.size))
+        let finalImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return finalImage
+    }
+
 }
 class ContactCell: UITableViewCell {
     
@@ -98,17 +164,18 @@ class ContactCell: UITableViewCell {
     
     let nameLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let contactImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(systemName: "person.circle")
         imageView.tintColor = .gray
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -133,6 +200,8 @@ class ContactCell: UITableViewCell {
         contentView.addSubview(nameLabel)
         contentView.addSubview(contactImageView)
         contentView.addSubview(addButton)
+        contactImageView.layer.cornerRadius = contactImageView.frame.height / 2
+        contactImageView.clipsToBounds = true
         
         NSLayoutConstraint.activate([
             contactImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),

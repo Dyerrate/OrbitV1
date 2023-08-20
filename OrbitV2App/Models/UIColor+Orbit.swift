@@ -12,7 +12,7 @@ extension UIColor {
     static let orbitBackground = UIColor(named: "OrbitBackground")!
     static let objectSecondary = UIColor(named: "ObjectSecondary")!
     static let objectPrimary = UIColor(named: "ObjectPrimary")!
-    static let orbitRing1 = UIColor(named: "OrbitRing1")!
+    static let panelFont = UIColor(named: "panelFont")!
     static let orbitRing2 = UIColor(named: "OrbitRing2")!
     static let orbitRing3 = UIColor(named: "OrbitRing3")!
     static let orbitPlanet1 = UIColor(named: "OrbitPlanet1")!
