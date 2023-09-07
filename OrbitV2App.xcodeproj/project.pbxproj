@@ -18,18 +18,29 @@
 		5808599A29D8715A00E6F2AD /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5808599929D8715A00E6F2AD /* Planet.swift */; };
 		5808599C29D8717300E6F2AD /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5808599B29D8717300E6F2AD /* Notification.swift */; };
 		5808599E29D8718600E6F2AD /* UIColor+Orbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5808599D29D8718600E6F2AD /* UIColor+Orbit.swift */; };
-		580859A129D877CA00E6F2AD /* RingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A029D877CA00E6F2AD /* RingView.swift */; };
 		580859A329D877E500E6F2AD /* PlanetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A229D877E500E6F2AD /* PlanetView.swift */; };
-		580859A529D8780400E6F2AD /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A429D8780400E6F2AD /* LoadingView.swift */; };
 		580859A829D879C900E6F2AD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A729D879C900E6F2AD /* NotificationManager.swift */; };
 		580859AA29D879E900E6F2AD /* SolarSystemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859A929D879E900E6F2AD /* SolarSystemViewController.swift */; };
 		580859AC29D879FC00E6F2AD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859AB29D879FC00E6F2AD /* LoginViewController.swift */; };
 		580859AE29D87A1200E6F2AD /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859AD29D87A1200E6F2AD /* RegisterViewController.swift */; };
 		581DCA1129E2339C006665C4 /* SolarSystemScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DCA1029E2339C006665C4 /* SolarSystemScene.swift */; };
+		582155C72A16B12B007D1150 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 582155C62A16B12B007D1150 /* FirebaseAuth */; };
+		582155C92A16EE33007D1150 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582155C82A16EE33007D1150 /* AuthenticationService.swift */; };
+		583756742A45118A005DD5BE /* PlanetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583756732A45118A005DD5BE /* PlanetManager.swift */; };
+		58583B672A0AFA0F003436CB /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58583B662A0AFA0F003436CB /* ContactsViewModel.swift */; };
 		586D878029DE1B780069E68B /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D877F29DE1B780069E68B /* LoadingViewController.swift */; };
 		586D878229DE20380069E68B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878129DE20380069E68B /* User.swift */; };
 		586D878429DE26AF0069E68B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D878329DE26AF0069E68B /* UserManager.swift */; };
+		58719B972A2EC95E0049FCA1 /* RussoOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58719B962A2EC95E0049FCA1 /* RussoOne-Regular.ttf */; };
+		58719B992A30C6230049FCA1 /* StarcruiserExpandedSemiItalic-gKeY.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 58719B982A30C6230049FCA1 /* StarcruiserExpandedSemiItalic-gKeY.ttf */; };
 		5872649129E31D4E00B795D7 /* PlanetNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5872649029E31D4E00B795D7 /* PlanetNode.swift */; };
+		587B90A02A27FA8D0096B6D7 /* ExtensionsForApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587B909F2A27FA8D0096B6D7 /* ExtensionsForApp.swift */; };
+		588D892229FB33420069BC14 /* FloatingActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588D892129FB33420069BC14 /* FloatingActionButton.swift */; };
+		588D89242A01E0C60069BC14 /* Orbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588D89232A01E0C60069BC14 /* Orbit.swift */; };
+		588D89262A02C4720069BC14 /* PlanetActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588D89252A02C4720069BC14 /* PlanetActionViewController.swift */; };
+		58AF7A1F29EC6F0E00828132 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58AF7A1E29EC6F0E00828132 /* NotificationListView.swift */; };
+		58C5953E29F203DA00AB49AA /* PlanetActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C5953D29F203DA00AB49AA /* PlanetActionView.swift */; };
+		58CD30762A09A7890060C651 /* BubbleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CD30752A09A7890060C651 /* BubbleButton.swift */; };
 		58EDE6D529E62BCE005CE84A /* OrbitNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EDE6D429E62BCE005CE84A /* OrbitNode.swift */; };
 		58EDE6D729E64710005CE84A /* menuBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EDE6D629E64710005CE84A /* menuBox.swift */; };
 /* End PBXBuildFile section */
@@ -48,18 +59,29 @@
 		5808599929D8715A00E6F2AD /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
 		5808599B29D8717300E6F2AD /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		5808599D29D8718600E6F2AD /* UIColor+Orbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Orbit.swift"; sourceTree = "<group>"; };
-		580859A029D877CA00E6F2AD /* RingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingView.swift; sourceTree = "<group>"; };
 		580859A229D877E500E6F2AD /* PlanetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetView.swift; sourceTree = "<group>"; };
-		580859A429D8780400E6F2AD /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		580859A729D879C900E6F2AD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		580859A929D879E900E6F2AD /* SolarSystemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarSystemViewController.swift; sourceTree = "<group>"; };
 		580859AB29D879FC00E6F2AD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		580859AD29D87A1200E6F2AD /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		581DCA1029E2339C006665C4 /* SolarSystemScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolarSystemScene.swift; sourceTree = "<group>"; };
+		582155C42A1444ED007D1150 /* OrbitV2App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OrbitV2App.entitlements; sourceTree = "<group>"; };
+		582155C82A16EE33007D1150 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		583756732A45118A005DD5BE /* PlanetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetManager.swift; sourceTree = "<group>"; };
+		58583B662A0AFA0F003436CB /* ContactsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewModel.swift; sourceTree = "<group>"; };
 		586D877F29DE1B780069E68B /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		586D878129DE20380069E68B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		586D878329DE26AF0069E68B /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		58719B962A2EC95E0049FCA1 /* RussoOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RussoOne-Regular.ttf"; sourceTree = "<group>"; };
+		58719B982A30C6230049FCA1 /* StarcruiserExpandedSemiItalic-gKeY.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "StarcruiserExpandedSemiItalic-gKeY.ttf"; sourceTree = "<group>"; };
 		5872649029E31D4E00B795D7 /* PlanetNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetNode.swift; sourceTree = "<group>"; };
+		587B909F2A27FA8D0096B6D7 /* ExtensionsForApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionsForApp.swift; sourceTree = "<group>"; };
+		588D892129FB33420069BC14 /* FloatingActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingActionButton.swift; sourceTree = "<group>"; };
+		588D89232A01E0C60069BC14 /* Orbit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Orbit.swift; sourceTree = "<group>"; };
+		588D89252A02C4720069BC14 /* PlanetActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetActionViewController.swift; sourceTree = "<group>"; };
+		58AF7A1E29EC6F0E00828132 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
+		58C5953D29F203DA00AB49AA /* PlanetActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetActionView.swift; sourceTree = "<group>"; };
+		58CD30752A09A7890060C651 /* BubbleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleButton.swift; sourceTree = "<group>"; };
 		58EDE6D429E62BCE005CE84A /* OrbitNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbitNode.swift; sourceTree = "<group>"; };
 		58EDE6D629E64710005CE84A /* menuBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = menuBox.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -69,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				582155C72A16B12B007D1150 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,17 +117,21 @@
 		5808597F29D870B600E6F2AD /* OrbitV2App */ = {
 			isa = PBXGroup;
 			children = (
+				582155C42A1444ED007D1150 /* OrbitV2App.entitlements */,
 				581DCA0D29E23362006665C4 /* Scenes */,
 				580859A629D879B700E6F2AD /* Controllers */,
 				5808599F29D8718F00E6F2AD /* Views */,
 				5808599429D8711B00E6F2AD /* Models */,
 				5808598029D870B600E6F2AD /* AppDelegate.swift */,
 				5808598229D870B600E6F2AD /* SceneDelegate.swift */,
+				582155C82A16EE33007D1150 /* AuthenticationService.swift */,
 				5808598429D870B600E6F2AD /* ViewController.swift */,
 				5808598629D870B700E6F2AD /* Main.storyboard */,
 				5808598929D870B800E6F2AD /* Assets.xcassets */,
 				5808598B29D870B800E6F2AD /* LaunchScreen.storyboard */,
 				5808598E29D870B800E6F2AD /* Info.plist */,
+				58719B982A30C6230049FCA1 /* StarcruiserExpandedSemiItalic-gKeY.ttf */,
+				58719B962A2EC95E0049FCA1 /* RussoOne-Regular.ttf */,
 			);
 			path = OrbitV2App;
 			sourceTree = "<group>";
@@ -118,6 +145,10 @@
 				5808599B29D8717300E6F2AD /* Notification.swift */,
 				5808599D29D8718600E6F2AD /* UIColor+Orbit.swift */,
 				586D878129DE20380069E68B /* User.swift */,
+				588D892129FB33420069BC14 /* FloatingActionButton.swift */,
+				588D89232A01E0C60069BC14 /* Orbit.swift */,
+				58CD30752A09A7890060C651 /* BubbleButton.swift */,
+				58583B662A0AFA0F003436CB /* ContactsViewModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -129,9 +160,9 @@
 				580859AB29D879FC00E6F2AD /* LoginViewController.swift */,
 				580859AD29D87A1200E6F2AD /* RegisterViewController.swift */,
 				586D877F29DE1B780069E68B /* LoadingViewController.swift */,
-				580859A029D877CA00E6F2AD /* RingView.swift */,
 				580859A229D877E500E6F2AD /* PlanetView.swift */,
-				580859A429D8780400E6F2AD /* LoadingView.swift */,
+				58AF7A1E29EC6F0E00828132 /* NotificationListView.swift */,
+				58C5953D29F203DA00AB49AA /* PlanetActionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -141,6 +172,8 @@
 			children = (
 				580859A729D879C900E6F2AD /* NotificationManager.swift */,
 				586D878329DE26AF0069E68B /* UserManager.swift */,
+				588D89252A02C4720069BC14 /* PlanetActionViewController.swift */,
+				583756732A45118A005DD5BE /* PlanetManager.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -149,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				581DCA1029E2339C006665C4 /* SolarSystemScene.swift */,
+				587B909F2A27FA8D0096B6D7 /* ExtensionsForApp.swift */,
 				5872649029E31D4E00B795D7 /* PlanetNode.swift */,
 				58EDE6D429E62BCE005CE84A /* OrbitNode.swift */,
 				58EDE6D629E64710005CE84A /* menuBox.swift */,
@@ -172,6 +206,9 @@
 			dependencies = (
 			);
 			name = OrbitV2App;
+			packageProductDependencies = (
+				582155C62A16B12B007D1150 /* FirebaseAuth */,
+			);
 			productName = OrbitV2App;
 			productReference = 5808597D29D870B600E6F2AD /* OrbitV2App.app */;
 			productType = "com.apple.product-type.application";
@@ -200,6 +237,9 @@
 				Base,
 			);
 			mainGroup = 5808597429D870B600E6F2AD;
+			packageReferences = (
+				582155C52A16B12B007D1150 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 5808597E29D870B600E6F2AD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -214,9 +254,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58719B992A30C6230049FCA1 /* StarcruiserExpandedSemiItalic-gKeY.ttf in Resources */,
 				5808598D29D870B800E6F2AD /* LaunchScreen.storyboard in Resources */,
 				5808598A29D870B800E6F2AD /* Assets.xcassets in Resources */,
 				5808598829D870B700E6F2AD /* Main.storyboard in Resources */,
+				58719B972A2EC95E0049FCA1 /* RussoOne-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,13 +274,19 @@
 				580859AC29D879FC00E6F2AD /* LoginViewController.swift in Sources */,
 				5808598529D870B600E6F2AD /* ViewController.swift in Sources */,
 				5808598129D870B600E6F2AD /* AppDelegate.swift in Sources */,
+				58AF7A1F29EC6F0E00828132 /* NotificationListView.swift in Sources */,
+				588D892229FB33420069BC14 /* FloatingActionButton.swift in Sources */,
+				58C5953E29F203DA00AB49AA /* PlanetActionView.swift in Sources */,
+				58CD30762A09A7890060C651 /* BubbleButton.swift in Sources */,
 				586D878029DE1B780069E68B /* LoadingViewController.swift in Sources */,
 				5808599829D8713F00E6F2AD /* Ring.swift in Sources */,
-				580859A529D8780400E6F2AD /* LoadingView.swift in Sources */,
+				588D89242A01E0C60069BC14 /* Orbit.swift in Sources */,
+				588D89262A02C4720069BC14 /* PlanetActionViewController.swift in Sources */,
 				58EDE6D729E64710005CE84A /* menuBox.swift in Sources */,
-				580859A129D877CA00E6F2AD /* RingView.swift in Sources */,
 				586D878229DE20380069E68B /* User.swift in Sources */,
+				587B90A02A27FA8D0096B6D7 /* ExtensionsForApp.swift in Sources */,
 				581DCA1129E2339C006665C4 /* SolarSystemScene.swift in Sources */,
+				58583B672A0AFA0F003436CB /* ContactsViewModel.swift in Sources */,
 				580859AE29D87A1200E6F2AD /* RegisterViewController.swift in Sources */,
 				580859A329D877E500E6F2AD /* PlanetView.swift in Sources */,
 				580859A829D879C900E6F2AD /* NotificationManager.swift in Sources */,
@@ -249,6 +297,8 @@
 				5808599E29D8718600E6F2AD /* UIColor+Orbit.swift in Sources */,
 				5808598329D870B600E6F2AD /* SceneDelegate.swift in Sources */,
 				580859AA29D879E900E6F2AD /* SolarSystemViewController.swift in Sources */,
+				582155C92A16EE33007D1150 /* AuthenticationService.swift in Sources */,
+				583756742A45118A005DD5BE /* PlanetManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,11 +443,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OrbitV2App/OrbitV2App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YHUTW85LXG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OrbitV2App/Info.plist;
+				INFOPLIST_KEY_NSContactsUsageDescription = "Allow access to contacts";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -421,11 +473,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OrbitV2App/OrbitV2App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = YHUTW85LXG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OrbitV2App/Info.plist;
+				INFOPLIST_KEY_NSContactsUsageDescription = "Allow access to contacts";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -466,6 +520,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		582155C52A16B12B007D1150 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		582155C62A16B12B007D1150 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 582155C52A16B12B007D1150 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5808597529D870B600E6F2AD /* Project object */;
 }

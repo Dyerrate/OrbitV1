@@ -8,30 +8,33 @@
 import SpriteKit
 
 class OrbitNode: SKNode {
-    init(width: CGFloat, height: CGFloat, center: CGPoint, rotationAngle: CGFloat, strokeColor: UIColor) {
+    private let width: CGFloat
+    private let height: CGFloat
+    var orbitRotation: CGFloat {
+        return zRotation
+    }
+    init(orbitSize: CGFloat, center: CGPoint, strokeColor: UIColor) {
+        self.width = orbitSize
+        self.height = orbitSize * 1.5 // Multiply the height by a factor (1.5) to make the path oval
         super.init()
-        
-        let orbit = createOvalPath(width: width, height: height, center: center, rotationAngle: rotationAngle, strokeColor: strokeColor)
-        addChild(orbit)
-        
-        self.path = createOvalPath(width: width, height: height, center: center, rotationAngle: rotationAngle, strokeColor: .clear).path
+
+        let orbitPath = createOvalPath(width: width, height: height, center: center, strokeColor: strokeColor)
+        addChild(orbitPath)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var path: CGPath?
-    
-    private func createOvalPath(width: CGFloat, height: CGFloat, center: CGPoint, rotationAngle: CGFloat, strokeColor: UIColor) -> SKShapeNode {
-        let path = UIBezierPath(ovalIn: CGRect(x: center.x - width / 2, y: center.y - height / 2, width: width, height: height))
-        let newPath = CGMutablePath()
-        let transform = CGAffineTransform(rotationAngle: rotationAngle)
-        newPath.addPath(path.cgPath, transform: transform)
+    private func createOvalPath(width: CGFloat, height: CGFloat, center: CGPoint, strokeColor: UIColor) -> SKShapeNode {
+        let path = UIBezierPath(ovalIn: CGRect(x: -width / 2, y: -height / 2, width: width, height: height))
+        let shapeNode = SKShapeNode(path: path.cgPath)
         
-        let shapeNode = SKShapeNode(path: newPath)
         shapeNode.strokeColor = strokeColor
         shapeNode.lineWidth = 1
         return shapeNode
+    }
+    func getOrbitPath() -> CGPath {
+        return (children.first as! SKShapeNode).path!
     }
 }

@@ -9,6 +9,7 @@ import UIKit
 
 class PlanetView: UIButton {
     private(set) var planet: Planet
+    var imageName: String?
 
     init(planet: Planet) {
         self.planet = planet
@@ -21,7 +22,11 @@ class PlanetView: UIButton {
     }
 
     private func configureView() {
-        setImage(planet.image, for: .normal)
+        // Create a UIImage from the string and set it as the button's image
+        if let imageName = planet.image, let image = UIImage(named: imageName) {
+            setImage(image, for: .normal)
+        }
+
         imageView?.contentMode = .scaleAspectFit
         addTarget(self, action: #selector(planetTapped), for: .touchUpInside)
     }
@@ -33,19 +38,3 @@ class PlanetView: UIButton {
         view.addSubview(self)
     }
 }
-
-//class PlanetView: UIView {
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        backgroundColor = .clear
-//
-//        let planetLayer = CAShapeLayer()
-//        planetLayer.path = UIBezierPath(ovalIn: bounds).cgPath
-//        planetLayer.fillColor = UIColor.red.cgColor
-//        layer.addSublayer(planetLayer)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//}
