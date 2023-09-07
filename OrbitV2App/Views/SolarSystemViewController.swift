@@ -16,6 +16,7 @@ protocol SolarSystemSceneDelegate: AnyObject {
 class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, PlanetActionViewDelegate {
     private var initialNotifications: [Notification]?
     let userManager = UserManager()
+    let notificationManager = NotificationManager()
     private var planetManager: PlanetManager?
     private var skView: SKView!
     private var notificationListView: NotificationListView?
@@ -87,7 +88,7 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         self.present(alert, animated: true, completion: nil)
     }
     
-    func updateNotificationListDB(updateNotifications: [Notification], planetInfo: Planet, option: String) {
+    func updateNotificationListDB(updateNotifications: [Notification], planetInfo: Planet, option: String, completion: @escaping (Result<Void, Error>) -> Void) {
         var newNotifications = [Notification]()
         for updateNotification in updateNotifications {
             if !notificationLists.contains(where: {$0.title == updateNotification.title}) {
@@ -102,15 +103,21 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
             } else {
                 self.planetList[planetInfo] = newNotifications
             }
-            self.updateNotificationsList(for: planetInfo)
-            // Then, update the database in the background
             userManager.addPlanetNotificationList(user: user!, planet: planetInfo, notifications: newNotifications) { result in
-                print("during the userManager")
+                print("during the userManager for add")
                 switch result {
-                case .success():
+                case .success(let returnedNotifications):
+                    for notificationRecord in returnedNotifications {
+                        if let index = self.planetList[planetInfo]?.firstIndex(where: { $0.title == notificationRecord["title"] }) {
+                            self.planetList[planetInfo]?[index].recordID = notificationRecord.recordID
+                        }
+                    }
+                    self.updateNotificationListNoPriorities(for: planetInfo)
+                    completion(.success(()))
                     print("Successfully updated notification list.")
                 case .failure(let error):
-                    print("Failed to update notification list: \\(error)")
+                    completion(.failure((error)))
+                    print("Failed to update notification list: \(error)")
                 }
             }
         case "Delete":
@@ -119,15 +126,17 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
                     updateNotifications.contains(where: { $0.title == notification.title })
                 })
                 self.planetList[planetInfo] = existingNotifications
-                self.updateNotificationsList(for: planetInfo)
+                self.updateNotificationListNoPriorities(for: planetInfo)
                 // Then, update the database in the background
                 userManager.removePlanetNotificationList(user: user!, planet: planetInfo, notifications: updateNotifications) { result in
                     print("during the userManager deletion: sent:", newNotifications)
                     switch result {
                     case .success():
                         print("Successfully removed/updated notification list.")
+                        completion(.success(()))
                     case .failure(let error):
-                        print("Failed to update notification list: \\(error)")
+                        completion(.failure((error)))
+                        print("Failed to update notification list: \(error)")
                     }
                 }
             } else {
@@ -136,7 +145,6 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         default:
             print("it didn't work")
         }
-        
     }
     
     func updateNotificationsList(for planet: Planet) {
@@ -145,6 +153,13 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         notificationCount = String(notificationLists.count)
         planetActionView?.updateNotificationPriorities()
         print("We have updated the notification list yay")
+    }
+    
+    func updateNotificationListNoPriorities(for planet: Planet) {
+        notificationLists = planetList[planet] ?? []
+        notificationLists.sort { $0.priority < $1.priority }
+        notificationCount = String(notificationLists.count)
+        print("We updated with no planetActionView call")
     }
 
     func planetTapped() {
@@ -162,6 +177,7 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         setupSKView()
         presentSolarSystemScene()
+        
     }
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -190,6 +206,7 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         planetActionView?.tableView.setEditing(editing, animated: animated)
     }
     //INFO: Displaying the planet panel
+    //TODO: REFACTOR THIS ALOT - idk yt it
     private func showPlanetActionView() {
         if planetActionView == nil {
             planetActionView?.changedNotifications = []
@@ -198,6 +215,8 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
             planetActionView?.delegate = self
             view.addSubview(planetActionView!)
         } else {
+            let dispatchForPriority = DispatchGroup()
+            let dispatchForDelete = DispatchGroup()
             if planetActionView?.changedNotifications != nil {
                 print("We are trying to change DB")
                 var addNotification: [Notification] = []
@@ -206,29 +225,80 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
                     let action = update.action
                     let notification = update.notification
                     switch action {
-                        case "add":
+                    case "add":
                         addNotification.append(update.notification)
                         print("We add a notification to send: add")
-                              // Logic to add the notification
-                        case "delete":
+                        // Logic to add the notification
+                    case "delete":
                         deleteNotification.append(update.notification)
                         print("We add a notification to send: delete")
-                              // Logic to delete the notification
-                        default:
-                            continue
-                        }
+                        // Logic to delete the notification
+                    default:
+                        continue
                     }
-                if !addNotification.isEmpty {
-                    updateNotificationListDB(updateNotifications: addNotification, planetInfo: currentPlanet!, option: "Add")
                 }
                 if !deleteNotification.isEmpty {
-                    updateNotificationListDB(updateNotifications: deleteNotification, planetInfo: currentPlanet!, option: "Delete")
+                    var newAdd = addNotification
+                    addNotification = []
+                    dispatchForDelete.enter()
+                    updateNotificationListDB(updateNotifications: deleteNotification, planetInfo: currentPlanet!, option: "Delete") {result in
+                        switch result {
+                        case .success():
+                            print("pray to fucking god this works 2")
+                            dispatchForDelete.leave()
+                        case .failure(let error):
+                            print("on my moms tits2: \(error)")
+                        }
+                        //When deletion is done, we do the add, if needed
+                        dispatchForDelete.notify(queue: .main){
+                            if !newAdd.isEmpty {
+                                print("before we enter the dispatch: ADD in dispatch")
+                                dispatchForPriority.enter()
+                                self.updateNotificationListDB(updateNotifications: newAdd, planetInfo: self.currentPlanet!, option: "Add") {result in
+                                    switch result {
+                                    case .success():
+                                        print("pray to fucking god this works 1.1")
+                                        dispatchForPriority.leave()
+                                        
+                                    case .failure(let error):
+                                        print("on my moms tits1.1: \(error)")
+                                    }
+                                    dispatchForPriority.notify(queue: .main) {
+                                        if(self.planetActionView?.priorityChange == true) {
+                                            self.checkForPriorityUpdate()
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+                        
+                    }
+                }
+                if !addNotification.isEmpty {
+                    print("before we enter the dispatch: ADD")
+                    dispatchForPriority.enter()
+                    updateNotificationListDB(updateNotifications: addNotification, planetInfo: currentPlanet!, option: "Add") {result in
+                        switch result {
+                        case .success():
+                            print("pray to fucking god this works 1.2")
+                            dispatchForPriority.leave()
+                        case .failure(let error):
+                            print("on my moms tits1.2: \(error)")
+                        }
+                        dispatchForPriority.notify(queue: .main) {
+                            if(self.planetActionView?.priorityChange == true) {
+                                self.checkForPriorityUpdate()
+                            }
+                        }
+                    }
+                }
+                if(self.planetActionView?.priorityChange == true && !addNotification.isEmpty && !deleteNotification.isEmpty) {
+                    checkForPriorityUpdate()
                 }
             }
-            if(planetActionView?.priorityChange == true) {
-                checkForPriorityUpdate()
-            }
-            clearPlanetActionView()
+            
+            self.clearPlanetActionView()
         }
         UIView.animate(withDuration: 0.3) {
             self.planetActionView?.frame.origin.y = self.view.bounds.height * 1/3
@@ -268,6 +338,7 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         skView.bounds = view.bounds
         skView.backgroundColor = UIColor.clear
         skView.presentScene(scene)
+        notificationManager.testThisOut()
     }
 
 }

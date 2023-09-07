@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 import UserNotifications
 
+
 class LoadingViewController: UIViewController {
+    var notificationManager = NotificationManager()
     var currentUser: User?
     var loadingProgressView: UIProgressView!
     let activityIndicator = UIActivityIndicatorView(style: .large)
@@ -57,20 +59,18 @@ class LoadingViewController: UIViewController {
         loadingProgressView.setProgress(1.0, animated: true)
     }
     
-    //When the view appears run this
-
-//function to check the user notifications
+//When the view appears run this
     func checkNotificationSettings() {
-        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+        notificationManager.checkAccess { (settings) in
             DispatchQueue.main.async {
-                switch settings.authorizationStatus {
+                switch settings {
                 case .authorized:
                     // If user's fullName is empty, show the UI for user to enter fullName
                     if self.currentUser?.fullName.isEmpty ?? true {
-                        print("ayy yo we here")
+                        print("INFO: fullName is empty")
                         self.showUsernameEntryPrompt()
                     } else {
-                        print("ayy yo naw we here cuh")
+                        print("INFO: fullName is not empty")
                         // If user's fullName is not empty, show the Solar System page
                         self.showSolarSystemPage()
                     }
@@ -150,13 +150,11 @@ class LoadingViewController: UIViewController {
                 self.showUsernameEntryPrompt()
                 return
             }
-
             guard let currentUser = self.currentUser else {
                 // Handle the case where currentUser is nil
                 print("currentUser is nil")
                 return
             }
-            
             // Update the user's fullName with the entered username
             UserManager.shared.updateUserName(uuid: currentUser.uuid, fullName: username, currentUser: currentUser) { (result) in
                 switch result {
@@ -194,25 +192,21 @@ class LoadingViewController: UIViewController {
     }
 
     func requestNotificationAuthorization(completion: @escaping (Bool) -> Void) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
-            DispatchQueue.main.async {
-                completion(granted)
+        notificationManager.requestAccess { authorizationStatus in
+            // Handle the authorization status here
+            switch authorizationStatus {
+            case .authorized:
+                print("Access granted")
+                completion(true)
+            case .denied:
+                print("Access denied")
+                completion(false)
+            default:
+                print("Default case")
+                completion(false)
             }
+            
         }
     }
     
-    func requestNotificationPermission() {
-        let center = UNUserNotificationCenter.current()
-        center.getNotificationSettings { settings in
-            if settings.authorizationStatus == .notDetermined {
-                center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-                    if let error = error {
-                        print("Error requesting authorization: \(error.localizedDescription)")
-                    } else {
-                        print("Notification authorization granted: \(granted)")
-                    }
-                }
-            }
-        }
-    }
 }

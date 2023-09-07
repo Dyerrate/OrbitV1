@@ -51,8 +51,9 @@ class SolarSystemScene: SKScene {
         // Variables to store the current orbit size and increment amount
         var currentOrbitSize: CGFloat = initialOrbitSize * 1.85
         let orbitSizeIncrement: CGFloat = 1.45
+        let sortedKeys = Array(planetList.keys).sorted { $0.position! < $1.position! }
 
-        for (planet, _) in planetList {
+        for planet in sortedKeys {
             let orbitNode = OrbitNode(orbitSize: currentOrbitSize, center: frameCenter, strokeColor: .gray)
             orbitNode.zRotation = inclinationAngle
             orbitNode.position = frameCenter

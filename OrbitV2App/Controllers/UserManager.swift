@@ -285,9 +285,10 @@ class UserManager {
                 record["notifications"] = existingNotificationReferences as CKRecordValue
                 publicDatabase.save(record) { (record, error) in
                     if let error = error {
-                        print("Error saving planet record: \(error.localizedDescription)")
+                        print("Error saving planet record when deleting: \(error.localizedDescription)")
                     } else {
                         print("Successfully saved planet record with removed notifications.")
+                        completion(.success(()))
                     }
                 }
             }
@@ -295,9 +296,9 @@ class UserManager {
 
         fetchOperation.fetchRecordsCompletionBlock = { records, error in
             if let error = error {
-                print("Error fetching records: \(error.localizedDescription)")
+                print("Error fetching records for deletion completion: \(error.localizedDescription)")
             } else if let records = records {
-                print("Fetched records: ", records)
+                print("Fetched records from deletion: ", records)
             }
         }
         publicDatabase.add(fetchOperation)
@@ -338,12 +339,11 @@ class UserManager {
         }
     }
 
-
-    
-    func addPlanetNotificationList(user: User, planet: Planet, notifications: [Notification], completion: @escaping (Result<Void, Error>) -> Void) {
+    func addPlanetNotificationList(user: User, planet: Planet, notifications: [Notification], completion: @escaping (Result<[CKRecord], Error>) -> Void) {
         let container = CKContainer.default()
         let publicDatabase = container.publicCloudDatabase
         var notificationRecords = [CKRecord]()
+        var newNotificationsToReturn = [CKRecord]()
         let planetReferences = user.planets
         let recordIDs = planetReferences.map { $0.recordID }
         let fetchOperation = CKFetchRecordsOperation(recordIDs: recordIDs)
@@ -355,16 +355,16 @@ class UserManager {
         for notification in notifications {
             let notificationRecord = createNotificationRecord(notification: notification)
             notificationRecords.append(notificationRecord)
-            // Save the record to the database
             dispatchGroup.enter()
             publicDatabase.save(notificationRecord) { (record, error) in
                 DispatchQueue.main.async {
                     if let error = error {
                         print("Error saving notification record: \(error.localizedDescription)")
+                        dispatchGroup.leave()
                     } else {
                         print("Successfully saved notification record.")
+                        dispatchGroup.leave()
                     }
-                    dispatchGroup.leave()
                 }
             }
         }
@@ -372,18 +372,20 @@ class UserManager {
         dispatchGroup.notify(queue: .main) {
             fetchOperation.perRecordCompletionBlock = { record, _, error in
                 if let error = error {
-                    print("Error fetching planet record: \(error.localizedDescription)")
+                    print("Error fetching planet record for planet: \(error.localizedDescription)")
                 } else if let record = record, record["name"] as? String == planet.name {
                     fetchedRecords.append(record)
                     let existingNotificationReferences = record["notifications"] as? [CKRecord.Reference] ?? []
+                    newNotificationsToReturn = notificationRecords
                     let newNotificationReferences = notificationRecords.map { CKRecord.Reference(record: $0, action: .none) }
                     let updatedNotificationReferences = existingNotificationReferences + newNotificationReferences
                     record["notifications"] = updatedNotificationReferences as CKRecordValue
                     publicDatabase.save(record) { (savedRecord, saveError) in
                         if let saveError = saveError {
-                            print("Error saving planet record: \(saveError.localizedDescription)")
+                            print("Error saving planet record in add: \(saveError.localizedDescription)")
                         } else {
                             print("Successfully saved planet record with new notifications.")
+                            
                         }
                     }
                 }
@@ -391,8 +393,11 @@ class UserManager {
             fetchOperation.fetchRecordsCompletionBlock = { records, error in
                 if let error = error {
                     print("Error fetching records: \(error.localizedDescription)")
+                    completion(.failure(error))
+                    
                 } else {
                     print("Fetched records: ", records!)
+                    completion(.success(newNotificationsToReturn))
                 }
             }
             publicDatabase.add(fetchOperation)
