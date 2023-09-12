@@ -110,6 +110,8 @@ class LoadingViewController: UIViewController {
             UserManager.shared.setSolarSystem(for: self.currentUser!) { planetList in
                 DispatchQueue.main.async {
                     if !planetList.isEmpty {
+                        self.notificationManager.onStartConfig(planetList: planetList)
+                    //    self.notificationManager.deleteAll()
                         // Passing the user
                         solarSystemVC.user = self.currentUser
                         // Passing the planetList
@@ -139,7 +141,6 @@ class LoadingViewController: UIViewController {
 
     func showUsernameEntryPrompt() {
         let alertController = UIAlertController(title: "Enter Username", message: "Please enter your username", preferredStyle: .alert)
-        
         alertController.addTextField { (textField) in
             textField.placeholder = "Username"
         }

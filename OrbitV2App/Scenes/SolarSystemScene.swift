@@ -58,7 +58,6 @@ class SolarSystemScene: SKScene {
             orbitNode.zRotation = inclinationAngle
             orbitNode.position = frameCenter
             //TODO: Fix the orbit label
-            orbitLabel(planetPosition: planet.position ?? 1, orbitNode: orbitNode)
             let planetNode = PlanetNode(planet: planet, imageNamed: planet.image!, view: view)
             let initialPosition = pointOnPath(path: orbitNode.getOrbitPath(), atPercentOfLength: 2.0, angle: orbitNode.orbitRotation)
             planetNode.position = initialPosition
@@ -85,31 +84,6 @@ class SolarSystemScene: SKScene {
         setupHUD()
         createStarLayers()
         
-    }
-    func orbitLabel(planetPosition: Int, orbitNode: OrbitNode) {
-        let orbitLabelText = setOrbitInfo(planetPosition: planetPosition)
-        let orbitLabel = SKLabelNode(text: orbitLabelText)
-        orbitLabel.color = .white
-        orbitLabel.fontSize = 30
-        
-        // Calculate the label position
-        let orbitRadius = max(orbitNode.frame.size.width, orbitNode.frame.size.height) / 2
-        let labelPositionX = orbitNode.position.x + orbitRadius * cos(orbitNode.zRotation)
-        let labelPositionY = orbitNode.position.y + orbitRadius * sin(orbitNode.zRotation)
-
-        // Position the label and add it to the orbit node
-        orbitLabel.position = CGPoint(x: labelPositionX, y: labelPositionY)
-        orbitNode.addChild(orbitLabel)
-    }
-    
-    func setOrbitInfo(planetPosition: Int) -> String {
-        switch planetPosition {
-        case 1: return "1 - 5 Days"
-        case 2: return "1 - 2 Weeks"
-        case 3: return "1 Month"
-        default: return "Error"
-
-        }
     }
     
     func handlePlanetTapped(planetInfo: Planet) {
