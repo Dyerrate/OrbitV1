@@ -206,8 +206,6 @@ class LoadingViewController: UIViewController {
                 print("Default case")
                 completion(false)
             }
-            
         }
     }
-    
 }
