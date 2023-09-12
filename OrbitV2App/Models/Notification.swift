@@ -16,8 +16,9 @@ class Notification {
     var date: Date?
     var priority: Int
     var recordID: CKRecord.ID?
+    var actionTaken: Int?
     
-    init(type: String, title: String, image: String?, description: String, date: Date?, priority: Int, recordID: CKRecord.ID?) {
+    init(type: String, title: String, image: String?, description: String, date: Date?, priority: Int, recordID: CKRecord.ID?,actionTaken: Int) {
         self.type = type
         self.title = title
         self.image = image
@@ -25,6 +26,7 @@ class Notification {
         self.date = date
         self.priority = priority
         self.recordID = recordID
+        self.actionTaken = actionTaken
     }
     
     init(record: CKRecord) {
@@ -35,12 +37,14 @@ class Notification {
         self.date = record["date"] as? Date
         self.priority = record["priority"] as? Int ?? 0// Update this if there's a priority field in the record
         self.recordID = record.recordID
+        self.actionTaken = record["actionTake"] as? Int ?? 0
     }
-    init(type: String, title: String, description: String, priority: Int) {
+    init(type: String, title: String, description: String, priority: Int, actionTaken: Int) {
         self.type = type
         self.title = title
         self.description = description
         self.priority = priority
+        self.actionTaken = actionTaken
     }
     
 }

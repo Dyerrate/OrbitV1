@@ -199,7 +199,7 @@ class PlanetActionView: UIView,UITextViewDelegate, UIScrollViewDelegate,Contacts
             delegate?.planetActionViewAlertAddContact()
         } else {
             // If the title does not exist, create a new Notification object
-            let newNotification = Notification(type: "Contact", title: "\(fullName)", description: "Contact \(fullName)", priority: thisPriority)
+            let newNotification = Notification(type: "Contact", title: "\(fullName)", description: "Contact \(fullName)", priority: thisPriority, actionTaken: 0)
             // Add the notification to your notifications array
             notifications.append(newNotification)
             changedNotifications.append((action: "add", notification: newNotification))
@@ -349,7 +349,7 @@ class PlanetActionView: UIView,UITextViewDelegate, UIScrollViewDelegate,Contacts
             print("Invalid Type.")
             return
         }
-        let newNotification = Notification(type: type, title: "\(titleText)", description: "\(descriptionText)", priority: thisPriority)
+        let newNotification = Notification(type: type, title: "\(titleText)", description: "\(descriptionText)", priority: thisPriority, actionTaken: 0)
         notifications.append(newNotification)
         changedNotifications.append((action: "add", notification: newNotification))
         clearTitleAndDescriptionFields()

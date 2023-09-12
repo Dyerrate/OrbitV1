@@ -171,7 +171,7 @@ class UserManager {
         let recordIDs = notificationReferences.map { $0.recordID }
         
         let fetchOperation = CKFetchRecordsOperation(recordIDs: recordIDs)
-        fetchOperation.desiredKeys = ["date", "description", "title", "notificationType", "imageName", "priority"]
+        fetchOperation.desiredKeys = ["date", "description", "title", "notificationType", "imageName", "priority", "actionTaken"]
         var notifications: [Notification] = []
         fetchOperation.perRecordCompletionBlock = { record, _, error in
             if let record = record {
@@ -272,7 +272,7 @@ class UserManager {
         let planetReferences = user.planets
         let recordIDs = planetReferences.map { $0.recordID }
         let fetchOperation = CKFetchRecordsOperation(recordIDs: recordIDs)
-        print("We are deleting a record here")
+        print("We are deleting a record here: UserManager.removePlanetNotificationList")
         // Step 1: Fetch planet records and remove the specified notifications
         fetchOperation.perRecordCompletionBlock = { record, recordID, error in
             if let error = error {

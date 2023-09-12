@@ -114,7 +114,7 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
                     }
                     self.updateNotificationListNoPriorities(for: planetInfo)
                     completion(.success(()))
-                    print("Successfully updated notification list.")
+                    print("Successfully updated notification list and are sending notifications.")
                 case .failure(let error):
                     completion(.failure((error)))
                     print("Failed to update notification list: \(error)")
@@ -265,7 +265,8 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
                                     }
                                     dispatchForPriority.notify(queue: .main) {
                                         if(self.planetActionView?.priorityChange == true) {
-                                            self.checkForPriorityUpdate()
+                                            self.checkForPriorityUpdate(planetOrbit: (self.currentPlanet?.position)!)
+                                            print("SENDING: To update priority notificationManager - 1")
                                         }
                                     }
                                 }
@@ -288,13 +289,15 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
                         }
                         dispatchForPriority.notify(queue: .main) {
                             if(self.planetActionView?.priorityChange == true) {
-                                self.checkForPriorityUpdate()
+                                self.checkForPriorityUpdate(planetOrbit: (self.currentPlanet?.position)!)
+                                print("SENDING: To update priority notificationManager - 2")
                             }
                         }
                     }
                 }
-                if(self.planetActionView?.priorityChange == true && !addNotification.isEmpty && !deleteNotification.isEmpty) {
-                    checkForPriorityUpdate()
+                if(self.planetActionView?.priorityChange == true && addNotification.isEmpty && deleteNotification.isEmpty) {
+                    checkForPriorityUpdate(planetOrbit: (self.currentPlanet?.position)!)
+                    print("SENDING: To update priority notificationManager - 3")
                 }
             }
             
@@ -305,16 +308,18 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         }
     }
     
-    private func checkForPriorityUpdate() {
+    private func checkForPriorityUpdate(planetOrbit: Int) {
         let currentNotifications: [Notification] = planetActionView!.notifications
         if !currentNotifications.isEmpty {
             userManager.updateNotificationPriority(notifications: currentNotifications){ result in
                 switch result {
                 case .success():
-                    print("we did it for priority")
+                    print("We have updated from the checkForPriorityUpdate")
+                    self.notificationManager.updateFromSolarSystem(planetList: self.planetList, planetOrbit: planetOrbit)
+                    print("Sending notificationManager Main: \(planetOrbit)")
                     
                 case . failure(let error):
-                    print("fialed to do this priority que: ", error)
+                    print("We failed to update from checkForPriorityUpdate: ", error)
                 }
             }
         }
@@ -325,7 +330,6 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         planetActionView?.removeFromSuperview()
         planetActionView = nil
     }
-    
     
     private func presentSolarSystemScene() {
         let scene = SolarSystemScene(size: skView.bounds.size, backgroundImageName: "backgoundImage")
@@ -338,7 +342,6 @@ class SolarSystemViewController: UIViewController, SolarSystemSceneDelegate, Pla
         skView.bounds = view.bounds
         skView.backgroundColor = UIColor.clear
         skView.presentScene(scene)
-        notificationManager.testThisOut()
     }
 
 }
