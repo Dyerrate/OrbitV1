@@ -591,7 +591,7 @@ enum NotificationCategory: String {
     var bodies: [String] {
         switch self {
         case .Contact:
-            return ["You should start a message with "]
+            return ["You should start a message with ", "Send a chat to ", "Create A convo with"]
         case .Event:
             return ["Medium Body 1", "Medium Body 2", "Medium Body 3"]
         case .Goal:

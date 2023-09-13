@@ -115,33 +115,131 @@ class UserManager {
             }
         }
     }
+    func createNotificationRecordForDefault(notification: Notification, completion: @escaping (Result<CKRecord, Error>) -> Void) {
+        let recordID = CKRecord.ID(recordName: UUID().uuidString)
+        let container = CKContainer.default()
+        let publicDatabase = container.publicCloudDatabase
+        let notificationRecord = CKRecord(recordType: "Notification", recordID: recordID)
+        notificationRecord["notificationType"] = notification.type
+        notificationRecord["description"] = notification.description
+        notificationRecord["priority"] = notification.priority
+        notificationRecord["title"] = notification.title
+        print("UPDATE: new notification record: ", notificationRecord)
+        
+        publicDatabase.save(notificationRecord) { (record, error) in
+            DispatchQueue.main.async {
+                if let record = record {
+                    completion(.success(record))
+                } else if let error = error {
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
     
     func createDefaultData(for user: User, completion: @escaping (Result<[CKRecord.Reference], Error>) -> Void) {
+        print("starting default user")
+        let container = CKContainer.default()
+        var planetRecords: [String] = []
+        let publicDatabase = container.publicCloudDatabase
+        var counter: Int = 1
+        let dispatchForWhile = DispatchGroup()
+        let dispatchForAfterWhile = DispatchGroup()
+        var recordNames: [String] = []
+        var recordIDForPush: [CKRecord.ID] = []
+        
+        while counter < 4 {
+            dispatchForWhile.enter()
+            print("start default enter")
+            let newNotification = Notification(type: "Event", title: "Test Event \(counter)", description: "Test notification to delete", priority: 1, actionTaken: 0)
+            createNotificationRecordForDefault(notification: newNotification) { result in
+                switch result {
+                case .success(let record):
+                    print("start default enter: success")
+                    let recordID = record.recordID.recordName
+                    recordNames.append(recordID)
+                    dispatchForWhile.leave()
+                case .failure(let error):
+                    print("we had an error with the mapping of new notifications: \(error)")
+                    dispatchForWhile.leave()
+                    
+                }
+            }
+            counter = counter + 1
+        }
+        //TODO: PLANETS ARE NOT GETTING ASSIGNED TO USER NOW
+        dispatchForWhile.notify(queue: .main) {
+            print("start for the dispatchForWhile.notify")
+            let planetNames:[String] = ["Namic","Krypton","Pluto","Namic"]
+            let recordID = recordNames.map { CKRecord.ID(recordName: $0) }
+            
+            var counter2: Int = 1
+            for record in recordID {
+                dispatchForAfterWhile.enter()
+                self.createPlanetRecord(id: record, name: planetNames[counter2],
+                                   imageName: "planet\(counter2)",
+                                   position: counter2) { result in
+                    switch result {
+                    case .success(let record):
+                        print("start default enter: success x2")
+                        let recordName = record.recordID.recordName
+                        planetRecords.append(recordName)
+                        dispatchForAfterWhile.leave()
+                    case .failure(let error):
+                        print("We had an error with this: \(error)")
+                        dispatchForAfterWhile.leave()
+                    }
+                }
+                counter2 = counter2 + 1
+            }
+            dispatchForAfterWhile.notify(queue: .main){
+                let newRecordIDZ = planetRecords.map { CKRecord.ID(recordName: $0) }
+                recordIDForPush.append(contentsOf: newRecordIDZ)
+                
+                publicDatabase.fetch(withRecordIDs: recordIDForPush) { result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let recordsByID):
+                            print("here are the final recordsByID: \(recordsByID)")
+                            let planetReferences = recordsByID.values.compactMap { recordResult -> CKRecord.Reference? in
+                                switch recordResult {
+                                case .success(let record):
+                                    print("success in the creating of the record")
+                                    return CKRecord.Reference(record: record, action: .none)
+                                case .failure(let error):
+                                    print("Error fetching planet: \(error)")
+                                    return nil
+                                }
+                            }
+                            completion(.success(planetReferences))
+                        case .failure(let error):
+                            print("Error fetching default planets: \(error)")
+                            completion(.failure(error))
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func createPlanetRecord(id: CKRecord.ID, name: String, imageName: String, position: Int, completion: @escaping (Result<CKRecord, Error>) -> Void) {
         let container = CKContainer.default()
         let publicDatabase = container.publicCloudDatabase
 
-        let recordNames = ["D097A36B-CF50-8338-0A6F-AD6689AC2B48",
-                           "F44E4D69-9BB2-BD6C-212D-C634527DF2B0",
-                           "FF8151FC-B9F6-F821-B215-FE5BFEA61F96"]
+        let planetRecord = CKRecord(recordType: "Planet")
+        planetRecord["name"] = name
+        planetRecord["image"] = imageName
+        planetRecord["position"] = position
 
-        let recordIDs = recordNames.map { CKRecord.ID(recordName: $0) }
+        let notificationReference = CKRecord.Reference(recordID: id, action: .none)
+        planetRecord["notifications"] = [notificationReference]
 
-        publicDatabase.fetch(withRecordIDs: recordIDs) { result in
+        publicDatabase.save(planetRecord) { (record, error) in
             DispatchQueue.main.async {
-                switch result {
-                case .success(let recordsByID):
-                    let planetReferences = recordsByID.values.compactMap { recordResult -> CKRecord.Reference? in
-                        switch recordResult {
-                        case .success(let record):
-                            return CKRecord.Reference(record: record, action: .none)
-                        case .failure(let error):
-                            print("Error fetching planet: \(error)")
-                            return nil
-                        }
-                    }
-                    completion(.success(planetReferences))
-                case .failure(let error):
-                    print("Error fetching default planets: \(error)")
+                if let record = record {
+                    print("we created new \(record)")
+                    completion(.success(record))
+                } else if let error = error {
                     completion(.failure(error))
                 }
             }
@@ -417,6 +515,7 @@ class UserManager {
 
     func getUser(by uuid: String, fullName: String?, email: String?, completion: @escaping (Result<User?, Error>) -> Void) {
         let container = CKContainer.default()
+        print("This is the container: \(container.publicCloudDatabase.description)")
         let publicDatabase = container.publicCloudDatabase
         let predicate = NSPredicate(format: "uuid == %@", uuid)
         let query = CKQuery(recordType: "User", predicate: predicate)
@@ -455,6 +554,7 @@ class UserManager {
                         print("No user fetched, creating a new user.")
                         self.createDefaultData(for: User(email: email ?? "", fullName: fullName ?? "", uuid: uuid, planets: [])) { result in
                             switch result {
+                                //TODO: IT IS RUNNING THIS BEFORE CREATEDEFAULTDATA IS FINISHED
                             case .success(let planets):
                                 let newUser = User(email: email ?? "", fullName: fullName ?? "", uuid: uuid, planets: planets)
                                 self.createUser(user: newUser, planets: planets) { result in

@@ -10,7 +10,7 @@
 	</array>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
-		<string>iCloud.com.ex.OrbitV2App</string>
+		<string>iCloud.com.app.OrbitSmartNotification</string>
 	</array>
 	<key>com.apple.developer.icloud-services</key>
 	<array>

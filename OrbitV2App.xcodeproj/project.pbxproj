@@ -24,7 +24,6 @@
 		580859AC29D879FC00E6F2AD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859AB29D879FC00E6F2AD /* LoginViewController.swift */; };
 		580859AE29D87A1200E6F2AD /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580859AD29D87A1200E6F2AD /* RegisterViewController.swift */; };
 		581DCA1129E2339C006665C4 /* SolarSystemScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DCA1029E2339C006665C4 /* SolarSystemScene.swift */; };
-		582155C72A16B12B007D1150 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 582155C62A16B12B007D1150 /* FirebaseAuth */; };
 		582155C92A16EE33007D1150 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582155C82A16EE33007D1150 /* AuthenticationService.swift */; };
 		583756742A45118A005DD5BE /* PlanetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583756732A45118A005DD5BE /* PlanetManager.swift */; };
 		58583B672A0AFA0F003436CB /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58583B662A0AFA0F003436CB /* ContactsViewModel.swift */; };
@@ -91,7 +90,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				582155C72A16B12B007D1150 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,7 +205,6 @@
 			);
 			name = OrbitV2App;
 			packageProductDependencies = (
-				582155C62A16B12B007D1150 /* FirebaseAuth */,
 			);
 			productName = OrbitV2App;
 			productReference = 5808597D29D870B600E6F2AD /* OrbitV2App.app */;
@@ -238,7 +235,6 @@
 			);
 			mainGroup = 5808597429D870B600E6F2AD;
 			packageReferences = (
-				582155C52A16B12B007D1150 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 5808597E29D870B600E6F2AD /* Products */;
 			projectDirPath = "";
@@ -445,7 +441,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = OrbitV2App/OrbitV2App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = YHUTW85LXG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OrbitV2App/Info.plist;
@@ -459,8 +455,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ex.OrbitV2App;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.OrbitSmartNotification;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -475,7 +471,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = OrbitV2App/OrbitV2App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = YHUTW85LXG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OrbitV2App/Info.plist;
@@ -489,8 +485,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ex.OrbitV2App;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.OrbitSmartNotification;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -520,25 +516,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		582155C52A16B12B007D1150 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		582155C62A16B12B007D1150 /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 582155C52A16B12B007D1150 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5808597529D870B600E6F2AD /* Project object */;
 }
